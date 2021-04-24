@@ -345,11 +345,14 @@ def post_e(temp,id,markup=None):
     aj(':hourglass_flowing_sand:Duración: <b>{0}</b>\n', temp.post.duracion)
     aj(':heavy_check_mark:Géneros: <b>{0}</b>\n',
        ', '.join(temp.post.genero) if type(temp.post.genero)==list else temp.post.genero)
+    aj(':heavy_check_mark:Tags: <b>{0}</b>\n',
+       ', '.join(temp.post.tags) if type(temp.post.tags)==list else temp.post.tags)
     aj(':heavy_check_mark:Estudio: <b>{0}</b>\n', temp.post.estudio)
     aj(':heavy_check_mark:Sistema de juego: <b>{0}</b>\n', temp.post.sis_j)
     aj(':floppy_disk:Peso: <b>{0}</b>\n', temp.post.peso)
     aj(':heavy_check_mark:Versión: <b>{0}</b>\n', temp.post.version)
     aj(':heavy_check_mark:Creador: <b>{0}</b>\n', temp.post.creador)
+    aj(':heavy_check_mark:Año: <b>{0}</b>\n', temp.post.year)
     aj(':heavy_check_mark:Estado: <b>{0}</b>\n', temp.post.status)
     aj('\n:beginner:Sinopsis: <b>{0}</b>\n', '{0}...'.format(temp.post.descripcion[:500]) if temp.post.descripcion and len(temp.post.descripcion) > 200 else temp.post.descripcion)
     aj('\n\n:warning:Información: <b>{0}</b>\n', temp.post.inf)
@@ -508,6 +511,8 @@ def callback_query(call):
                         temp.post.status=p['status']
                         temp.post.episodes=p['episodes']
                         temp.post.genero=p['genres']
+                        temp.post.tags=p['tags']
+                        temp.post.year=p['year']
                         temp.post.descripcion=error_Html(p['description'])
                     if data[2]=='visualnovel':
                         p=vn.get('vn','basic,details',f'(id={data[1]})','')['items'][0]

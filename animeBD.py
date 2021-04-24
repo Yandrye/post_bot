@@ -10,6 +10,8 @@ class P_Anime():
         self.titulo = ''
         self.imagen = None
         self.tipo='#Desconocido'
+        self.tags=''
+        self.year=''
         self.format = ''
         self.status = ''
         self.episodes = ''

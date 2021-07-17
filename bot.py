@@ -1,7 +1,7 @@
 import anilist
 import telebot
 import emoji
-import animeBD
+from animeBD import DBHelper,Temp,P_Anime
 import traceback
 from vndb import VNDB 
 import translate
@@ -13,11 +13,13 @@ try:
     id_canal = post_bot.id_canal
     API_TOKEN = post_bot.API_TOKEN
     support = post_bot.support
+    dbaddress = post_bot.dbaddress
 except:
     import os
     id_canal = os.environ['ID_CANAL']
     API_TOKEN = os.environ['TOKEN']
     support = os.environ['SUPPORT']
+    dbaddress = os.environ['DBADDRESS']
 
 
 import logging
@@ -25,6 +27,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 
 vn = VNDB('darkness_posting_bot', '0.1')
+db = DBHelper(dbaddress)
 
 def icono(text=''):
     return emoji.emojize(text, use_aliases=True)
@@ -75,8 +78,8 @@ def introducc(id,name):
         print(traceback.format_exc())
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    if not animeBD.get_u(message.chat.id):
-        animeBD.new_u(message.chat.id,animeBD.Temp())
+    if not db.get_u(message.chat.id):
+        db.new_u(message.chat.id,Temp())
 
     introducc(message.chat.id,message.chat.first_name)
 
@@ -91,7 +94,7 @@ def send_welcome(message):
     if status=='creator' or status=='administrator':
         try:
             id=int(message.text[3:])
-            if animeBD.del_post(id):
+            if db.del_post(id):
                 try:bot.send_message(message.chat.id,"borrado")
                 except:
                     print(traceback.format_exc())
@@ -122,14 +125,15 @@ def titulo(message):
     if message.text==boton_cancelar:
         introducc(message.chat.id,message.chat.first_name)
     else:
-        temp=animeBD.get_temp(message.chat.id)
+        temp=db.get_temp(message.chat.id)
         if temp:
             temp.titulo=message.text
             temp.username=message.chat.username
             temp.id_user=message.chat.id
             temp.name=message.chat.first_name
-            temp.post=animeBD.P_Anime()
-            animeBD.set_temp(message.chat.id,temp)
+            temp.hidden_name=None
+            temp.post=P_Anime()
+            db.set_temp(message.chat.id,temp)
 
             markup = InlineKeyboardMarkup()
             markup.row(InlineKeyboardButton('Anime', callback_data='a'))
@@ -319,7 +323,7 @@ def editar(message,t,temp):
             temp.post.imagen = message.photo[0].file_id
 
 
-        animeBD.set_temp(message.chat.id,temp)
+        db.set_temp(message.chat.id,temp)
         post_e(temp,message.chat.id,temp.markup if temp.markup else markup_e())
 
 
@@ -357,7 +361,7 @@ def post_e(temp,id,markup=None):
     aj('\n:beginner:Sinopsis: <b>{0}</b>\n', '{0}...'.format(temp.post.descripcion[:500]) if temp.post.descripcion and len(temp.post.descripcion) > 200 else temp.post.descripcion)
     aj('\n\n:warning:Información: <b>{0}</b>\n', temp.post.inf)
     tt.append('\n:star:Aporte #{0} de {1}'.format(
-        animeBD.get_aport(temp.id_user)+1,('@' if temp.username else '') + (temp.username if temp.username else temp.name if temp.name else 'Anónimo')))
+        db.get_aport(temp.id_user)+1,('@' if temp.username else '') + (temp.username if temp.username else temp.name if temp.name else 'Anónimo')))
     if temp.post.link:tt.append('\n\n:link:Link: <a href="{0}"><b>{1}</b></a>'.format(temp.post.link,temp.post.episo_up))
 
     capt = icono(''.join(tt))
@@ -392,8 +396,8 @@ def txtlink(message,temp):
                     print(traceback.format_exc())
         except:
             print(traceback.format_exc())
-        animeBD.aport(message.chat.id)
-        animeBD.new_p(id_sms,message.chat.id,temp.post.titulo)
+        db.aport(message.chat.id)
+        db.new_p(id_sms,message.chat.id,temp.post.titulo)
         #tx_resumen()
 
     if message.text=='/finalizar':
@@ -404,7 +408,7 @@ def txtlink(message,temp):
     elif message.content_type == 'text':
         if 'HTTP://' in message.text.upper() or 'HTTPS://' in message.text.upper() :
             temp.post.link=message.text
-            animeBD.set_temp(message.chat.id, temp)
+            db.set_temp(message.chat.id, temp)
             if  temp.post.txt:
                 finalizar()
             else:
@@ -422,7 +426,7 @@ def txtlink(message,temp):
     elif message.content_type == "document":
         temp.post.txt = message.document.file_id
         temp.post.name_txt=message.document.file_name
-        animeBD.set_temp(message.chat.id, temp)
+        db.set_temp(message.chat.id, temp)
         if  temp.post.link:
             finalizar()
         else:
@@ -443,7 +447,7 @@ def capsub(message,temp):
         introducc(message.chat.id,message.chat.first_name)
     else:
         temp.post.episo_up=error_Html(message.text)
-        animeBD.set_temp(message.chat.id,temp)
+        db.set_temp(message.chat.id,temp)
         try:sms = bot.send_message(message.chat.id, t_ela)
         except:
             print(traceback.format_exc())
@@ -457,7 +461,7 @@ def callback_query(call):
             print('error borrar\n{0}'.format(e))
 
     else:
-        temp=animeBD.get_temp(call.from_user.id)
+        temp=db.get_temp(call.from_user.id)
         if temp:
             data = call.data.split('^')
             l=len(data)
@@ -482,7 +486,7 @@ def callback_query(call):
                         temp.post.titulo=error_Html(temp.titulo)
                         post_e(temp, call.from_user.id, markup_e())
 
-                    animeBD.set_temp(call.from_user.id, temp)
+                    db.set_temp(call.from_user.id, temp)
 
 
 
@@ -502,7 +506,7 @@ def callback_query(call):
                         temp.search=None
                         temp.titulo=''
 
-                        temp.post = animeBD.P_Anime()
+                        temp.post = P_Anime()
                         temp.post.tipo = tipD[temp.tipo]
                         temp.tipo=''
                         temp.post.imagen=p['coverImage']
@@ -535,7 +539,7 @@ def callback_query(call):
                         temp.search=None
                         temp.titulo=''
 
-                        temp.post = animeBD.P_Anime()
+                        temp.post = P_Anime()
                         temp.post.tipo = tipD[temp.tipo]
                         temp.tipo=''
                         temp.post.imagen=p['image']
@@ -544,7 +548,7 @@ def callback_query(call):
                         temp.post.titulo=error_Html(p['title'])
                         temp.post.descripcion=translate.traducir(error_Html(p['description']))
 
-                    animeBD.set_temp(call.from_user.id,temp)
+                    db.set_temp(call.from_user.id,temp)
 
                     post_e(temp,call.from_user.id,markup_e())
 
@@ -571,7 +575,7 @@ def callback_query(call):
                     if data[1]=='1':markup=markup_e()
                     else:markup=markup_e1()
                     temp.markup=markup
-                    animeBD.set_temp(call.from_user.id,temp)
+                    db.set_temp(call.from_user.id,temp)
                     post_e(temp, call.from_user.id,markup)
 
 
@@ -580,7 +584,7 @@ def callback_query(call):
 def tx_resumen():
     #id_sms,titulo
 
-    p=animeBD.get_resumen()
+    p=db.get_resumen()
     posts=[]
     id=0
     for pp in p:
@@ -590,12 +594,12 @@ def tx_resumen():
             try:id = bot.send_message(id_canal, texto, parse_mode='html', disable_web_page_preview=True).id
             except:
                 print(traceback.format_exc())
-            animeBD.set_id_re(id)
+            db.set_id_re(id)
             return id
 
         texto=icono('<b><u>Resumen (24 horas):</u></b>\n\n{0}'.format('\n\n'.join(posts)))
 
-        id_antiguo=animeBD.get_id_re()
+        id_antiguo=db.get_id_re()
         if id_antiguo:
             try:
                 id=bot.edit_message_text(texto,id_canal,id_antiguo,parse_mode='html',disable_web_page_preview=True).id

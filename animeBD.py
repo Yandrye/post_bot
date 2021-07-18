@@ -70,15 +70,18 @@ class General(Base):
 
 class DBHelper:
     def __init__(self, dbname: str):
-        self.engine = create_engine(
-            dbname, connect_args={'check_same_thread': False} if dbname.startswith('sqlite') else None)
-        self.session: Session = sessionmaker(self.engine)()
+        if dbname.startswith('sqlite'):
+            self.engine = create_engine(
+                dbname, connect_args={'check_same_thread': False})
+        else:
+            self.engine = create_engine(dbname)
         Base.metadata.bind = self.engine
         Base.metadata.create_all(checkfirst=True)
 
     def get_u(self, id: int):
+        session: Session = sessionmaker(self.engine)()
         try:
-            db_item = self.session.query(User).filter_by(
+            db_item = session.query(User).filter_by(
                 id=id).first()
             if db_item:
                 return True
@@ -89,10 +92,11 @@ class DBHelper:
             raise e
 
     def new_u(self, id: int, temp: Temp):
+        session: Session = sessionmaker(self.engine)()
         try:
             new_item = User(id=id, temp=pickle.dumps(temp), aport=0)
-            self.session.add(new_item)
-            self.session.commit()
+            session.add(new_item)
+            session.commit()
         except Exception as e:
             print(f'An error occurred in insertion. The item to insert was\n' +
                   f'{id}')
@@ -100,22 +104,24 @@ class DBHelper:
             return False
 
     def set_temp(self, id: int, temp: Temp):
+        session: Session = sessionmaker(self.engine)()
         try:
-            db_item = self.session.query(User).filter_by(
+            db_item = session.query(User).filter_by(
                 id=id).first()
             if db_item:
-                self.session.delete(db_item)
+                session.delete(db_item)
                 updated = User(id=db_item.id, aport=db_item.aport,
                                temp=pickle.dumps(temp))
-                self.session.add(updated)
-                self.session.commit()
+                session.add(updated)
+                session.commit()
         except Exception as e:
             print(f'An error occurred updating. The item to update was\n{id}')
             raise e
 
     def get_temp(self, id: int):
+        session: Session = sessionmaker(self.engine)()
         try:
-            db_item = self.session.query(User).filter_by(id=id).first()
+            db_item = session.query(User).filter_by(id=id).first()
             if db_item:
                 return pickle.loads(db_item.temp)
             else:
@@ -127,20 +133,22 @@ class DBHelper:
             raise e
 
     def aport(self, id: int):
+        session: Session = sessionmaker(self.engine)()
         try:
-            db_item = self.session.query(User).filter_by(id=id).first()
+            db_item = session.query(User).filter_by(id=id).first()
             if db_item:
-                self.session.delete(db_item)
-                self.session.add(User(
+                session.delete(db_item)
+                session.add(User(
                     id=db_item.id,
                     aport=db_item.aport+1, temp=db_item.temp))
-                self.session.commit()
+                session.commit()
         except Exception as e:
             print(f'An error occurred updating. The item to update was\n{id}')
 
     def get_aport(self, id: int):
+        session: Session = sessionmaker(self.engine)()
         try:
-            db_item = self.session.query(User).filter_by(id=id).first()
+            db_item = session.query(User).filter_by(id=id).first()
             if db_item:
                 return db_item.aport
         except Exception as e:
@@ -148,22 +156,24 @@ class DBHelper:
             raise e
 
     def new_p(self, id_sms: int, id_user: int, titulo: str):
+        session: Session = sessionmaker(self.engine)()
         curret_time = time()//3600
         try:
             new_item = Post(time=curret_time, id_sms=id_sms,
                             id_user=id_user, titulo=titulo)
-            self.session.add(new_item)
-            self.session.commit()
+            session.add(new_item)
+            session.commit()
         except Exception as e:
             print(
                 f'An error occurred in insertion. The item to insert was\n{id_sms} {id_user} {titulo} {curret_time}')
             raise e
 
     def del_post(self, id_sms: int):
+        session: Session = sessionmaker(self.engine)()
         try:
-            db_item = self.session.query(Post).filter_by(id_sms=id_sms).first()
-            self.session.delete(db_item)
-            self.session.commit()
+            db_item = session.query(Post).filter_by(id_sms=id_sms).first()
+            session.delete(db_item)
+            session.commit()
         except Exception as e:
             print(
                 f'An error occurred in deletion. The item to delete was\n{id_sms}')
@@ -171,10 +181,11 @@ class DBHelper:
         return True
 
     def get_resumen(self):
+        session: Session = sessionmaker(self.engine)()
         current_time = time()//3600
         query = text(":current_time - time < 25")
         try:
-            items = self.session.query(Post).filter(
+            items = session.query(Post).filter(
                 query).params(current_time=current_time).all()
             # not quite shure of tuple
             return [(item.id_sms, item.titulo) for item in items]
@@ -183,8 +194,9 @@ class DBHelper:
             raise e
 
     def get_id_re(self):
+        session: Session = sessionmaker(self.engine)()
         try:
-            db_item = self.session.query(General).first()
+            db_item = session.query(General).first()
             if db_item:
                 return db_item.id_sms
             else:
@@ -194,12 +206,13 @@ class DBHelper:
             raise e
 
     def set_id_re(self, id_sms: int):
+        session: Session = sessionmaker(self.engine)()
         try:
-            db_item = self.session.query(General).first()
+            db_item = session.query(General).first()
             if db_item:
-                self.session.delete(db_item)
-                self.session.add(General(id_sms=id_sms))
-                self.session.commit()
+                session.delete(db_item)
+                session.add(General(id_sms=id_sms))
+                session.commit()
         except Exception as e:
             print(f'An error occurred settig resumee id')
             return False

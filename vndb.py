@@ -19,7 +19,6 @@ try:
     import ujson as json
 except:
     import json
-import time
 
 
 class vndbException(Exception):
@@ -27,7 +26,7 @@ class vndbException(Exception):
 
 
 class VNDB(object):
-    """ Python interface for vndb's api (vndb.org), featuring cache """
+    """ Python interface for vndb's api (vndb.org)"""
     protocol = 1
 
     def __init__(self, clientname, clientver, username=None, password=None, debug=False):
@@ -54,9 +53,6 @@ class VNDB(object):
         if debug:
             print('Authenticated')
 
-        self.cache = {'get': []}
-        self.cachetime = 600  # cache stuff for 10 minutes
-
     def close(self):
         self.sock.close()
 
@@ -69,16 +65,9 @@ class VNDB(object):
         u'http://s.vndb.org/cv/99/4599.jpg'
         """
         args = '{0} {1} {2} {3}'.format(type, flags, filters, options)
-        for item in self.cache['get']:
-            if time.time() - item['time'] >= self.cachetime:
-                self.cache.pop(item)
-            if item['query'] == args:
-                return item['results']
 
         self.sendCommand('get', args)
         res = self.getResponse()[1]
-        self.cache['get'].append(
-            {'time': time.time(), 'query': args, 'results': res})
         return res
 
     def sendCommand(self, command, args=None):

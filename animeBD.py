@@ -73,7 +73,8 @@ class DBHelper:
         if dbname.startswith('sqlite'):
             self.engine = create_engine(
                 dbname, connect_args={'check_same_thread': False})
-        else:
+        elif dbname.startswith('postgres'):
+            dbname = dbname.replace('postgres', 'postgresql', 1)
             self.engine = create_engine(dbname)
         Base.metadata.bind = self.engine
         Base.metadata.create_all(checkfirst=True)

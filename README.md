@@ -12,4 +12,4 @@ ID_CANAL = -100xxx (el canal donde poner los posts)
 
 TOKEN = el token del bot de telegram que te da [BotFather](https://t.me/BotFather)
 
-SUPPORT = id del grupo canal donde irian la info de quien ha hecho posts anónimos(para moderación)
+SUPPORT = id del grupo/canal donde se anuncia quien ha hecho posts anónimos(para moderación)

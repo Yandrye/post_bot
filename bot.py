@@ -358,7 +358,7 @@ def post_e(temp,id,markup=None):
     aj(':heavy_check_mark:Creador: <b>{0}</b>\n', temp.post.creador)
     aj(':heavy_check_mark:Año: <b>{0}</b>\n', temp.post.year)
     aj(':heavy_check_mark:Estado: <b>{0}</b>\n', temp.post.status)
-    aj('\n:beginner:Sinopsis: <b>{0}</b>\n', '{0}...'.format(temp.post.descripcion[:500]) if temp.post.descripcion and len(temp.post.descripcion) > 200 else temp.post.descripcion)
+    aj('\n:beginner:Sinopsis: <b>{0}</b>\n', '{0}...'.format(temp.post.descripcion[:500]) if temp.post.descripcion and len(temp.post.descripcion) > 500 else temp.post.descripcion)
     aj('\n\n:warning:Información: <b>{0}</b>\n', temp.post.inf)
     tt.append('\n:star:Aporte #{0} de {1}'.format(
         db.get_aport(temp.id_user)+1,('@' if temp.username else '') + (temp.username if temp.username else temp.name if temp.name else 'Anónimo')))

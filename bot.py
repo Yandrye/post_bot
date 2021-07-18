@@ -19,7 +19,7 @@ except:
     id_canal = os.environ['ID_CANAL']
     API_TOKEN = os.environ['TOKEN']
     support = os.environ['SUPPORT']
-    dbaddress = os.environ['DBADDRESS']
+    dbaddress = os.environ['DATABASE_URL']
 
 
 import logging

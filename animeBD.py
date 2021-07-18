@@ -49,7 +49,7 @@ Base = declarative_base()
 
 class User(Base):
     __tablename__ = 'usuarios'
-    id = Column(Text, primary_key=True)
+    id = Column(Integer, primary_key=True)
     temp = Column(LargeBinary)
     aport = Column(Integer)
 

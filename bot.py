@@ -407,7 +407,9 @@ def txtlink(message,temp):
         elif message.text=='/cancelar':
             introducc(message.chat.id,message.chat.first_name)
 
-        elif 'HTTP://' in message.text.upper() or 'HTTPS://' in message.text.upper() :
+        regex = r"https://s3\.todus\.cu/todus/(voice|file|video|audio|photo)/[0-9]{4}-[0-9]{2}-[0-9]{2}/[a-z0-9]{3}/[a-z0-9]{64}.*"
+
+        if re.match(regex, message.text):
             temp.post.link=message.text
             db.set_temp(message.chat.id, temp)
 

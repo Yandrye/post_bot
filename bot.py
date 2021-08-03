@@ -261,6 +261,15 @@ def markup_e1():
     markup.row(InlineKeyboardButton(salir_menu, callback_data='s'),InlineKeyboardButton(boton_sigui, callback_data='e^c'.format()))
     return markup
 
+def filter(text: str):
+    url_regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
+    username_regex = r"\B@\w+"
+    t_me_link = r"t\.me\/[-a-zA-Z0-9.]+(\/\S*)?"
+
+    if re.match(url_regex, text) or re.search(username_regex, text) or re.search(t_me_link, text):
+        return False
+
+    return True
 
 def editar(message,t,temp):
     if message.text==boton_cancelar:
@@ -270,6 +279,10 @@ def editar(message,t,temp):
             var=None
         else: var=error_Html(message.text)
         if message.content_type == 'text':
+
+            if not filter (var):
+                post_e(temp,message.chat.id,temp.markup if temp.markup else markup_e())
+                return
 
             if t=='n':
                 temp.post.titulo=var

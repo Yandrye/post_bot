@@ -280,7 +280,7 @@ def editar(message,t,temp):
         else: var=error_Html(message.text)
         if message.content_type == 'text':
 
-            if not filter (var):
+            if var and not filter (var):
                 post_e(temp,message.chat.id,temp.markup if temp.markup else markup_e())
                 return
 

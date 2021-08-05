@@ -284,6 +284,15 @@ def editar(message,t,temp):
                 post_e(temp,message.chat.id,temp.markup if temp.markup else markup_e())
                 return
 
+            if temp.post.imagen:
+                caracteres=len(make_message_body(temp)) + len(var)
+                if caracteres > 1024:
+                    bot.send_message(message.chat.id, 'Error ,el texto del post en general tiene {0} caracteres y '
+                                    'no debe superar los 1024. Vuelva a intentarlo por favor editando con los botones inferiores.'.format(
+                                    caracteres))
+                    post_e(temp,message.chat.id,temp.markup if temp.markup else markup_e())
+                    return
+
             if t=='n':
                 temp.post.titulo=var
             elif t=='e':
@@ -378,6 +387,11 @@ def post_e(temp,id,markup=None):
     if temp.post.link:tt.append('\n\n:link:Link: <a href="{0}"><b>{1}</b></a>'.format(temp.post.link,temp.post.episo_up))
 
     capt = icono(''.join(tt))
+    
+    return capt
+
+def post_e(temp: Temp, id, markup=None):
+    capt = make_message_body(temp)
     try:
         if temp.post.imagen:
             try:

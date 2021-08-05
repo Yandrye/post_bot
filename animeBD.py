@@ -10,6 +10,12 @@ from time import time
 class Temp():
     def __init__(self):
         self.markup = None
+        self.titulo = None
+        self.username = None
+        self.id_user: int = int()
+        self.name = None
+        self.hidden_name = None
+        self.post = P_Anime()
 
 
 class P_Anime():

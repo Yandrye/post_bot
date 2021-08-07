@@ -5,9 +5,10 @@ from animeBD import DBHelper,Temp,P_Anime
 import traceback
 from vndb import VNDB 
 import translate
-from telebot.types import InlineKeyboardButton,InlineKeyboardMarkup
+import re
+from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from time import sleep
-from threading import Thread
+
 try:
     from secure import post_bot
     id_canal = post_bot.id_canal
@@ -55,7 +56,7 @@ t_li=icono(':dizzy_face: Link incorrecto, por favor vuelva a enviarlo correctame
 t_ela=icono(':link: Ponga el link s3 del txt.\nEste se obtiene enviando el txt a toDus o de la misma forma que envió las partes.')
 t_ad=icono(':expressionless: Lo sentimos, debe ser miembro del canal @{0} para poder usar el bot.\n\n/Empezar'.format(usercanal))
 
-def acceso(id):
+def acceso(id: int):
     m = bot.get_chat_member(id_canal, id).status
     # “creator”, “administrator”, “member”, “restricted”, “left” or “kicked”
     if m == 'member' or m == 'creator' or m == 'administrator':
@@ -65,17 +66,18 @@ def acceso(id):
         except:print(traceback.format_exc())
         return False
 
-def inicio(id):
+def inicio(id: int):
     if acceso(id):
         try:sms = bot.send_message(id, t_i)
         except:
             print(traceback.format_exc())
         bot.register_next_step_handler(sms, titulo)
 
-def introducc(id,name):
+def introducc(id: int, name: str):
     try:bot.send_message(id, t_pre.format(name,usercanal,boton_empezar))
     except:
         print(traceback.format_exc())
+
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     if not db.get_u(message.chat.id):
@@ -84,7 +86,7 @@ def send_welcome(message):
     introducc(message.chat.id,message.chat.first_name)
 
 @bot.message_handler(commands=[boton_empezar[1:]])
-def send_welcome(message):
+def send_welcome(message: Message):
     inicio(message.chat.id)
 
 @bot.message_handler(commands=['bp'])
@@ -125,7 +127,7 @@ def titulo(message):
     if message.text==boton_cancelar:
         introducc(message.chat.id,message.chat.first_name)
     else:
-        temp=db.get_temp(message.chat.id)
+        temp: Temp = db.get_temp(message.chat.id)
         if temp:
             temp.titulo=message.text
             temp.username=message.chat.username
@@ -133,7 +135,7 @@ def titulo(message):
             temp.name=message.chat.first_name
             temp.hidden_name=None
             temp.post=P_Anime()
-            db.set_temp(message.chat.id,temp)
+            db.set_temp(message.chat.id, temp)
 
             markup = InlineKeyboardMarkup()
             markup.row(InlineKeyboardButton('Anime', callback_data='a'))
@@ -153,10 +155,10 @@ def error_Html(text):
     else:return ''
 
 @bot.message_handler(func=lambda m: True)
-def echo_all(message):
+def echo_all(message: Message):
     introducc(message.chat.id,message.chat.first_name)
 
-def post_s(id,temp,index, kind):
+def post_s(id: int, temp: Temp, index: int, kind: str):
     '''
         Crea la suguerencia de post
     '''
@@ -271,7 +273,7 @@ def filter(text: str):
 
     return True
 
-def editar(message,t,temp):
+def editar(message: Message, t: str, temp: Temp):
     if message.text==boton_cancelar:
         introducc(message.chat.id,message.chat.first_name)
     else:
@@ -406,8 +408,7 @@ def post_e(temp: Temp, id, markup=None):
             return vvvv
     except:print(traceback.format_exc())
 
-
-def txtlink(message,temp):
+def txtlink(message: Message, temp: Temp):
     def finalizar():
         id_sms = post_e(temp, id_canal)
         if temp.post.txt:
@@ -470,8 +471,7 @@ def txtlink(message,temp):
             print(traceback.format_exc())
         bot.register_next_step_handler(sms, txtlink, temp)
 
-
-def capsub(message,temp):
+def capsub(message: Message, temp: Temp):
     if message.text==boton_cancelar:
         introducc(message.chat.id,message.chat.first_name)
     else:

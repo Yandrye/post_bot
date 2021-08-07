@@ -6,15 +6,17 @@ from sqlalchemy.sql import text
 import pickle
 from time import time
 
+from telebot.types import InlineKeyboardMarkup
+
 
 class Temp():
     def __init__(self):
-        self.markup = None
-        self.titulo = None
-        self.username = None
+        self.markup: InlineKeyboardMarkup = None
+        self.titulo: str = None
+        self.username: str = None
         self.id_user: int = int()
-        self.name = None
-        self.hidden_name = None
+        self.name: str = None
+        self.hidden_name: str = None
         self.post = P_Anime()
 
 

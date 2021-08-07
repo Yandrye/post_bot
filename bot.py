@@ -402,7 +402,7 @@ def txtlink(message: Message, temp: Temp):
         elif message.text=='/cancelar':
             introducc(message.chat.id,message.chat.first_name)
 
-        regex = r"https://s3\.todus\.cu/todus/(voice|file|video|audio|photo)/[0-9]{4}-[0-9]{2}-[0-9]{2}/[a-z0-9]{3}/[a-z0-9]{64}.*"
+        regex = r"https://s3\.todus\.cu/todus/(voice|file|video|audio|picture)/[0-9]{4}-[0-9]{2}-[0-9]{2}/[a-z0-9]{3}/[a-z0-9]{64}.*"
 
         if re.match(regex, message.text):
             temp.post.link=message.text

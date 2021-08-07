@@ -95,7 +95,7 @@ def titulo(message: Message):
     else:
         temp: Temp = db.get_temp(message.chat.id)
         if temp:
-            temp.titulo=message.text
+            temp.titulo = message.text[:150] + ('...' if len(message.text) > 150 else '')
             temp.username=message.chat.username
             temp.id_user=message.chat.id
             temp.name=message.chat.first_name

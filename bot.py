@@ -401,15 +401,15 @@ def txtlink(message: Message, temp: Temp):
         except:
             print(traceback.format_exc())
         db.aport(message.chat.id)
-        db.new_p(id_sms,message.chat.id,temp.post.titulo)
-        #tx_resumen()
 
     if message.content_type == 'text':
 
         if message.text=='/finalizar' and temp.post.link:
             finalizar()
+            return
         elif message.text=='/cancelar':
             introducc(message.chat.id,message.chat.first_name)
+            return
 
         regex = r"https://s3\.todus\.cu/todus/(voice|file|video|audio|picture)/[0-9]{4}-[0-9]{2}-[0-9]{2}/[a-z0-9]{3}/[a-z0-9]{64}.*"
 
@@ -421,18 +421,21 @@ def txtlink(message: Message, temp: Temp):
             except:
                 print(traceback.format_exc())
             bot.register_next_step_handler(sms, txtlink, temp)
+            return
 
-        elif temp.post.link:
+        if temp.post.link:
             try:sms=bot.send_message(message.chat.id,t_at)
             except:
                 print(traceback.format_exc())
             bot.register_next_step_handler(sms, txtlink, temp)
+            return
 
         else:
             try:sms=bot.send_message(message.chat.id,t_li)
             except:
                 print(traceback.format_exc())
             bot.register_next_step_handler(sms, txtlink, temp)
+            return
 
     elif message.content_type == "document" and temp.post.link:
         temp.post.txt = message.document.file_id

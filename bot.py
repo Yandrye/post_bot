@@ -8,6 +8,7 @@ import translate
 import re
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from time import sleep
+import copy
 
 try:
     from secure import post_bot
@@ -254,61 +255,69 @@ def editar(message: Message, t: str, temp: Temp):
                 post_e(temp,message.chat.id,temp.markup if temp.markup else markup_e())
                 return
 
-            caracteres = len(make_message_body(temp)) + len(var)
+            def set_var(temp: Temp, var: str):
+                _temp = copy.deepcopy(temp)
+                if t=='n':
+                    _temp.post.titulo=var
+                elif t=='e':
+                    _temp.post.episodes = var
+                elif t=='m':
+                    _temp.post.temporada=var
+                elif t=='a':
+                    _temp.post.audio=var
+                elif t=='g':
+                    _temp.post.genero=var
+                elif t=='s':
+                    _temp.post.status=var
+                elif t=='i':
+                    _temp.post.descripcion=var
+                elif t=='t':
+                    _temp.post.tipo=var
+                elif t=='f':
+                    _temp.post.format=var
+                elif t=='in':
+                    _temp.post.inf=var
+                elif t=='to':
+                    _temp.post.tomos=var
+                elif t=='p':
+                    _temp.post.plata=var
+                elif t=='es':
+                    _temp.post.estudio=var
+                elif t=='id':
+                    _temp.post.idioma=var
+                elif t=='d':
+                    _temp.post.duracion=var
+                elif t=='v':
+                    _temp.post.volumen=var
+                elif t=='ve':
+                    _temp.post.version=var
+                elif t=='pe':
+                    _temp.post.peso=var
+                elif t=='cr':
+                    _temp.post.creador=var
+                elif t=='sj':
+                    _temp.post.sis_j=var
+                elif t=='im':
+                    _temp.post.imagen=None
+                elif t=='anonymity':
+                    if var=='/si':
+                        _temp.hidden_name = _temp.username if _temp.username else _temp.name
+                        _temp.username = None
+                        _temp.name = None
+
+                return _temp
+
+            _temp = set_var(temp, var)
+            caracteres = len(make_message_body(_temp))
 
             if caracteres > 1024:
                 bot.send_message(message.chat.id, 'Mucho texto !!! Vuelva a intentarlo editando lo mismo pero con {0} letras de menos.'.format(caracteres-1024))
                 sleep(2)
                 post_e(temp, message.chat.id, temp.markup if temp.markup else markup_e())
                 return
-
-            if t=='n':
-                temp.post.titulo=var
-            elif t=='e':
-                temp.post.episodes = var
-            elif t=='m':
-                temp.post.temporada=var
-            elif t=='a':
-                temp.post.audio=var
-            elif t=='g':
-                temp.post.genero=var
-            elif t=='s':
-                temp.post.status=var
-            elif t=='i':
-                temp.post.descripcion=var
-            elif t=='t':
-                temp.post.tipo=var
-            elif t=='f':
-                temp.post.format=var
-            elif t=='in':
-                temp.post.inf=var
-            elif t=='to':
-                temp.post.tomos=var
-            elif t=='p':
-                temp.post.plata=var
-            elif t=='es':
-                temp.post.estudio=var
-            elif t=='id':
-                temp.post.idioma=var
-            elif t=='d':
-                temp.post.duracion=var
-            elif t=='v':
-                temp.post.volumen=var
-            elif t=='ve':
-                temp.post.version=var
-            elif t=='pe':
-                temp.post.peso=var
-            elif t=='cr':
-                temp.post.creador=var
-            elif t=='sj':
-                temp.post.sis_j=var
-            elif t=='im':
-                temp.post.imagen=None
-            elif t=='anonymity':
-                if var=='/si':
-                    temp.hidden_name = temp.username if temp.username else temp.name
-                    temp.username = None
-                    temp.name = None
+            
+            else:
+                temp = _temp
 
         elif t=='im' and message.content_type == 'photo':
             temp.post.imagen = message.photo[0].file_id

@@ -89,41 +89,7 @@ def send_welcome(message):
 def send_welcome(message: Message):
     inicio(message.chat.id)
 
-@bot.message_handler(commands=['bp'])
-def send_welcome(message):
-    status=bot.get_chat_member(id_canal, message.chat.id).status
-    #print(status)
-    if status=='creator' or status=='administrator':
-        try:
-            id=int(message.text[3:])
-            if db.del_post(id):
-                try:bot.send_message(message.chat.id,"borrado")
-                except:
-                    print(traceback.format_exc())
-                #tx_resumen()
-
-            else:
-                try:bot.send_message(message.chat.id,"error al borrar")
-                except:
-                    print(traceback.format_exc())
-        except Exception as e:
-            try:bot.send_message(message.chat.id,e)
-            except:
-                print(traceback.format_exc())
-            print('comando bp',e)
-
-@bot.message_handler(commands=['tx'])
-def send_welcome(message):
-    status=bot.get_chat_member(id_canal, message.chat.id).status
-    #print(status)
-    if status=='creator' or status=='administrator':
-        #tx_resumen()
-        try:bot.send_message(message.chat.id,'Resumen actualizado')
-        except:
-            print(traceback.format_exc())
-
-
-def titulo(message):
+def titulo(message: Message):
     if message.text==boton_cancelar:
         introducc(message.chat.id,message.chat.first_name)
     else:
@@ -610,55 +576,14 @@ def callback_query(call):
 
         else:introducc(call.from_user.id,call.from_user.first_name)
 
-def tx_resumen():
-    #id_sms,titulo
-
-    p=db.get_resumen()
-    posts=[]
-    id=0
-    for pp in p:
-        posts.append('<a href="http://t.me/{0}/{1}">:radioactive: <b>{2}</b></a>'.format(usercanal,pp[0],pp[1]))
-    if posts:
-        def new_post(texto):
-            try:id = bot.send_message(id_canal, texto, parse_mode='html', disable_web_page_preview=True).id
-            except:
-                print(traceback.format_exc())
-            db.set_id_re(id)
-            return id
-
-        texto=icono('<b><u>Resumen (24 horas):</u></b>\n\n{0}'.format('\n\n'.join(posts)))
-
-        id_antiguo=db.get_id_re()
-        if id_antiguo:
-            try:
-                id=bot.edit_message_text(texto,id_canal,id_antiguo,parse_mode='html',disable_web_page_preview=True).id
-            except Exception as e:
-                print(e)
-                if 'Bad Request: message to edit not found' in str(e) or 'MESSAGE_ID_INVALID' in str(e):
-                    id=new_post(texto)
-                else:id=id_antiguo
-        else:id=new_post(texto)
-        #bot.unpin_chat_message(id_canal,id)
-        try:bot.pin_chat_message(id_canal,id,disable_notification=True)
-        except Exception as e:print('pin resumen',e)
-
-
-def hilo_time():
-
-    while True:
-        sleep(3600)
-        g = Thread(target=tx_resumen)
-        g.start()
-
-
 def inicio_bot():
     if usercanal and API_TOKEN and id_canal:
-        #g = Thread(target=hilo_time)
-        #g.start()
+
         print('-----------------------\nBot iniciado\n-----------------------')
-        #tx_resumen()
+
         try:
             bot.polling(none_stop=True)
         except:print(traceback.format_exc())
 
-if __name__ == '__main__':inicio_bot()
+if __name__ == '__main__':
+    inicio_bot()

@@ -1,10 +1,8 @@
-from sqlalchemy import Column, Integer, Text, LargeBinary
+from sqlalchemy import Column, Integer, LargeBinary
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
-from sqlalchemy.sql import text
 import pickle
-from time import time
 
 from telebot.types import InlineKeyboardMarkup
 
@@ -60,15 +58,6 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     temp = Column(LargeBinary)
     aport = Column(Integer)
-
-
-class Post(Base):
-    __tablename__ = 'posts'
-    id_post = Column(Integer, primary_key=True, autoincrement=True)
-    time = Column(Integer)
-    id_sms = Column(Integer)
-    id_user = Column(Integer)
-    titulo = Column(Text)
 
 
 class DBHelper:
@@ -159,42 +148,4 @@ class DBHelper:
                 return db_item.aport
         except Exception as e:
             print(f'An error occurred retrieving items. Item was\n{id}')
-            raise e
-
-    def new_p(self, id_sms: int, id_user: int, titulo: str):
-        session: Session = sessionmaker(self.engine)()
-        curret_time = time()//3600
-        try:
-            new_item = Post(time=curret_time, id_sms=id_sms,
-                            id_user=id_user, titulo=titulo)
-            session.add(new_item)
-            session.commit()
-        except Exception as e:
-            print(
-                f'An error occurred in insertion. The item to insert was\n{id_sms} {id_user} {titulo} {curret_time}')
-            raise e
-
-    def del_post(self, id_sms: int):
-        session: Session = sessionmaker(self.engine)()
-        try:
-            db_item = session.query(Post).filter_by(id_sms=id_sms).first()
-            session.delete(db_item)
-            session.commit()
-        except Exception as e:
-            print(
-                f'An error occurred in deletion. The item to delete was\n{id_sms}')
-            return False
-        return True
-
-    def get_resumen(self):
-        session: Session = sessionmaker(self.engine)()
-        current_time = time()//3600
-        query = text(":current_time - time < 25")
-        try:
-            items = session.query(Post).filter(
-                query).params(current_time=current_time).all()
-            # not quite shure of tuple
-            return [(item.id_sms, item.titulo) for item in items]
-        except Exception as e:
-            print(f'An error occurred retrieving resumee')
             raise e

@@ -18,10 +18,10 @@ try:
     dbaddress = post_bot.dbaddress
 except:
     import os
-    id_canal = os.environ['ID_CANAL']
-    API_TOKEN = os.environ['TOKEN']
-    support = os.environ['SUPPORT']
-    dbaddress = os.environ['DATABASE_URL']
+    id_canal = os.getenv('ID_CANAL')
+    API_TOKEN = os.getenv('TOKEN')
+    support = os.getenv('SUPPORT')
+    dbaddress = os.getenv('DATABASE_URL')
 
 
 import logging
@@ -590,13 +590,16 @@ def callback_query(call):
         else:introducc(call.from_user.id,call.from_user.first_name)
 
 def inicio_bot():
-    if usercanal and API_TOKEN and id_canal:
+    if usercanal and API_TOKEN and id_canal and dbaddress:
 
         print('-----------------------\nBot iniciado\n-----------------------')
 
         try:
             bot.polling(none_stop=True)
-        except:print(traceback.format_exc())
+        except:
+            print(traceback.format_exc())
+    else:
+        print("Missing env Config")
 
 if __name__ == '__main__':
     inicio_bot()

@@ -78,11 +78,13 @@ class DBHelper:
         try:
             db_item = session.query(User).filter_by(
                 id=id).first()
+            session.close()
             if db_item:
                 return True
             else:
                 return False
         except Exception as e:
+            session.close()
             print(f'An error occurred retrieving items. Item was\n{id}')
             raise e
 
@@ -92,7 +94,9 @@ class DBHelper:
             new_item = User(id=id, temp=pickle.dumps(temp), aport=0)
             session.add(new_item)
             session.commit()
+            session.close()
         except Exception as e:
+            session.close()
             print(f'An error occurred in insertion. The item to insert was\n' +
                   f'{id}')
             print(e)
@@ -109,7 +113,9 @@ class DBHelper:
                                temp=pickle.dumps(temp))
                 session.add(updated)
                 session.commit()
+                session.close()
         except Exception as e:
+            session.close()
             print(f'An error occurred updating. The item to update was\n{id}')
             raise e
 
@@ -117,6 +123,7 @@ class DBHelper:
         session: Session = sessionmaker(self.engine)()
         try:
             db_item = session.query(User).filter_by(id=id).first()
+            session.close()
             if db_item:
                 return pickle.loads(db_item.temp)
             else:
@@ -124,6 +131,7 @@ class DBHelper:
                 self.get_temp(id)
                 return False
         except Exception as e:
+            session.close()
             print(f'An error occurred retrieving items. Item was\n{id}')
             raise e
 
@@ -137,15 +145,19 @@ class DBHelper:
                     id=db_item.id,
                     aport=db_item.aport+1, temp=db_item.temp))
                 session.commit()
+                session.close()
         except Exception as e:
+            session.close()
             print(f'An error occurred updating. The item to update was\n{id}')
 
     def get_aport(self, id: int):
         session: Session = sessionmaker(self.engine)()
         try:
             db_item = session.query(User).filter_by(id=id).first()
+            session.close()
             if db_item:
                 return db_item.aport
         except Exception as e:
+            session.close()
             print(f'An error occurred retrieving items. Item was\n{id}')
             raise e

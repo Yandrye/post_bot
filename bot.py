@@ -254,14 +254,13 @@ def editar(message: Message, t: str, temp: Temp):
                 post_e(temp,message.chat.id,temp.markup if temp.markup else markup_e())
                 return
 
-            if temp.post.imagen:
-                caracteres=len(make_message_body(temp)) + len(var)
-                if caracteres > 1024:
-                    bot.send_message(message.chat.id, 'Error ,el texto del post en general tiene {0} caracteres y '
-                                    'no debe superar los 1024. Vuelva a intentarlo por favor editando con los botones inferiores.'.format(
-                                    caracteres))
-                    post_e(temp,message.chat.id,temp.markup if temp.markup else markup_e())
-                    return
+            caracteres = len(make_message_body(temp)) + len(var)
+
+            if caracteres > 1024:
+                bot.send_message(message.chat.id, 'Mucho texto !!! Vuelva a intentarlo editando lo mismo pero con {0} letras de menos.'.format(caracteres-1024))
+                sleep(2)
+                post_e(temp, message.chat.id, temp.markup if temp.markup else markup_e())
+                return
 
             if t=='n':
                 temp.post.titulo=var

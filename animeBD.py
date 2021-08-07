@@ -69,11 +69,6 @@ class Post(Base):
     titulo = Column(Text)
 
 
-class General(Base):
-    __tablename__ = 'generales'
-    id_sms = Column(Integer, primary_key=True)
-
-
 class DBHelper:
     def __init__(self, dbname: str):
         if dbname.startswith('sqlite'):
@@ -201,28 +196,3 @@ class DBHelper:
         except Exception as e:
             print(f'An error occurred retrieving resumee')
             raise e
-
-    def get_id_re(self):
-        session: Session = sessionmaker(self.engine)()
-        try:
-            db_item = session.query(General).first()
-            if db_item:
-                return db_item.id_sms
-            else:
-                return None
-        except Exception as e:
-            print(f'An error occurred retrieving resumee id')
-            raise e
-
-    def set_id_re(self, id_sms: int):
-        session: Session = sessionmaker(self.engine)()
-        try:
-            db_item = session.query(General).first()
-            if db_item:
-                session.delete(db_item)
-                session.add(General(id_sms=id_sms))
-                session.commit()
-        except Exception as e:
-            print(f'An error occurred settig resumee id')
-            return False
-        return True

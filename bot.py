@@ -333,7 +333,7 @@ def make_message_body(temp: Temp):
         if var: tt.append(txt.format(var))
 
     tit = ':radioactive:{0} {1}\n\n'.format(
-        '({0})'.format(temp.post.tipo[0]) if temp.post.tipo else '',
+        '({0})'.format("".join(x[0] for x in temp.post.tipo.split(" "))) if temp.post.tipo else '',
         '<b>{0}</b>'.format(temp.post.titulo) if temp.post.titulo else ':expressionless:')
 
     tt.append(tit)

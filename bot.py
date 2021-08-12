@@ -39,7 +39,7 @@ def icono(text=''):
 bot = telebot.TeleBot(API_TOKEN)
 usercanal = bot.get_chat(id_canal).username
 
-tipD = {'a': 'ANIME', 'm': 'MANGA', 'vn': 'NOVELA VISUAL'}
+tipD = {'a': 'ANIME', 'm': 'MANGA', 'vn': 'VISUAL NOVEL', 'j': 'JUEGO'}
 boton_empezar = icono('/Empezar')
 t_i = icono(
     '	:writing_hand: Ingrese el título de la multimedia a subir o presione /cancelar para salir.')

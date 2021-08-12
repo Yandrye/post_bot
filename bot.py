@@ -440,8 +440,18 @@ def make_message_body(temp: Temp):
     return capt
 
 
+def complete_hard_requirements(temp: Temp):
+    markup = InlineKeyboardMarkup()
+    members = temp.post.__dict__
+    for item in members:
+        if members[item] == '‼editar':
+            markup.row(edit_buttons[item])
+    return markup if markup.keyboard else markup_e()
+
+
 def post_e(temp: Temp, id, markup=None):
     capt = make_message_body(temp)
+    markup = complete_hard_requirements(temp)
     try:
         if temp.post.imagen:
             try:

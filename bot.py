@@ -446,12 +446,13 @@ def complete_hard_requirements(temp: Temp):
     for item in members:
         if members[item] == '‼editar':
             markup.row(edit_buttons[item])
-    return markup if markup.keyboard else markup_e()
+    return markup
 
 
 def post_e(temp: Temp, id, markup=None):
     capt = make_message_body(temp)
-    markup = complete_hard_requirements(temp)
+    _markup = complete_hard_requirements(temp)
+    markup = _markup if _markup.keyboard else markup
     try:
         if temp.post.imagen:
             try:

@@ -212,24 +212,50 @@ def post_s(id: int, temp: Temp, index: int, kind: str):
         post_e(temp, id, markup_e())
 
 
+edit_buttons = {
+    "titulo": InlineKeyboardButton('Editar Título', callback_data='e^n'),
+    "episodes": InlineKeyboardButton('Editar Episodios', callback_data='e^e'),
+    "tipo": InlineKeyboardButton('Editar Tipo', callback_data='e^t'),
+    "format": InlineKeyboardButton('Editar Formato', callback_data='e^f'),
+    "temporada": InlineKeyboardButton('Editar Temporada', callback_data='e^m'),
+    "audio": InlineKeyboardButton('Editar Audio', callback_data='e^a'),
+    "genero": InlineKeyboardButton('Editar Géneros', callback_data='e^g'),
+    "status": InlineKeyboardButton('Editar Estado', callback_data='e^s'),
+    "descripcion": InlineKeyboardButton('Editar Sinopsis', callback_data='e^i'),
+    "imagen": InlineKeyboardButton('Editar Imagen', callback_data='e^im'),
+    "inf": InlineKeyboardButton('Editar Información', callback_data='e^in'),
+    "tomos": InlineKeyboardButton('Editar Tomo', callback_data='e^to'),
+    "plata": InlineKeyboardButton('Editar Plataforma', callback_data='e^p'),
+    "estudio": InlineKeyboardButton('Editar Estudio', callback_data='e^es'),
+    "idioma": InlineKeyboardButton('Editar Idioma', callback_data='e^id'),
+    "duracion": InlineKeyboardButton('Editar Duración', callback_data='e^d'),
+    "volumen": InlineKeyboardButton('Editar Volumen', callback_data='e^v'),
+    "version": InlineKeyboardButton('Editar Versión', callback_data='e^ve'),
+    "peso":  InlineKeyboardButton('Editar Peso', callback_data='e^pe'),
+    "creador": InlineKeyboardButton('Editar Creador', callback_data='e^cr'),
+    "sis_j": InlineKeyboardButton('Editar Sis de Juego', callback_data='e^sj'),
+    "hidden_name": InlineKeyboardButton('Hacer post anónimo', callback_data='e^anonymity'),
+}
+
+
 def markup_e():
     markup = InlineKeyboardMarkup()
-    markup.row(InlineKeyboardButton('Editar Título', callback_data='e^n'),
-               InlineKeyboardButton('Editar Episodios', callback_data='e^e'))
+    markup.row(edit_buttons["titulo"],
+               edit_buttons["episodes"])
 
-    markup.row(InlineKeyboardButton('Editar Tipo', callback_data='e^t'),
-               InlineKeyboardButton('Editar Formato', callback_data='e^f'))
+    markup.row(edit_buttons["tipo"],
+               edit_buttons["format"])
 
-    markup.row(InlineKeyboardButton('Editar Temporada', callback_data='e^m'),
-               InlineKeyboardButton('Editar Audio', callback_data='e^a'))
+    markup.row(edit_buttons["temporada"],
+               edit_buttons["audio"])
 
-    markup.row(InlineKeyboardButton('Editar Géneros', callback_data='e^g'),
-               InlineKeyboardButton('Editar Estado', callback_data='e^s'))
+    markup.row(edit_buttons["genero"],
+               edit_buttons["status"])
 
-    markup.row(InlineKeyboardButton('Editar Sinopsis', callback_data='e^i'),
-               InlineKeyboardButton('Editar Imagen', callback_data='e^im'))
+    markup.row(edit_buttons["descripcion"],
+               edit_buttons["imagen"])
 
-    markup.row(InlineKeyboardButton('Editar Información', callback_data='e^in'),
+    markup.row(edit_buttons["inf"],
                InlineKeyboardButton(icono(':heavy_plus_sign: Más Categorías :heavy_plus_sign:'), callback_data='m^2'))
 
     markup.row(InlineKeyboardButton(salir_menu, callback_data='s'),
@@ -239,23 +265,22 @@ def markup_e():
 
 def markup_e1():
     markup = InlineKeyboardMarkup()
-    markup.row(InlineKeyboardButton('Editar Tomo', callback_data='e^to'),
-               InlineKeyboardButton('Editar Plataforma', callback_data='e^p'))
+    markup.row(edit_buttons["tomos"],
+               edit_buttons["plata"])
 
-    markup.row(InlineKeyboardButton('Editar Estudio', callback_data='e^es'),
-               InlineKeyboardButton('Editar Idioma', callback_data='e^id'))
+    markup.row(edit_buttons["estudio"],
+               edit_buttons["idioma"])
 
-    markup.row(InlineKeyboardButton('Editar Duración', callback_data='e^d'),
-               InlineKeyboardButton('Editar Volumen', callback_data='e^v'))
+    markup.row(edit_buttons["duracion"],
+               edit_buttons["volumen"])
 
-    markup.row(InlineKeyboardButton('Editar Versión', callback_data='e^ve'),
-               InlineKeyboardButton('Editar Peso', callback_data='e^pe'))
+    markup.row(edit_buttons["version"],
+               edit_buttons["peso"])
 
-    markup.row(InlineKeyboardButton('Editar Creador', callback_data='e^cr'),
-               InlineKeyboardButton('Editar Sis de Juego', callback_data='e^sj'))
+    markup.row(edit_buttons["creador"],
+               edit_buttons["sis_j"])
 
-    markup.row(InlineKeyboardButton(
-        'Hacer post anónimo', callback_data='e^anonymity'))
+    markup.row(edit_buttons["hidden_name"])
 
     markup.row(InlineKeyboardButton(icono(
         ':heavy_plus_sign: Más Categorías :heavy_plus_sign:'), callback_data='m^1'))

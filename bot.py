@@ -620,7 +620,7 @@ def callback_query(call: CallbackQuery):
                         temp.post.status = p['status']
                         temp.post.episodes = p['episodes']
                         temp.post.genero = p['genres']
-                        temp.post.tags = p['tags']
+                        #temp.post.tags = p['tags']
                         temp.post.year = p['year']
                         temp.post.descripcion = error_Html(p['description'])
                     if data[2] == 'visualnovel':

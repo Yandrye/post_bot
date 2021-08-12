@@ -6,7 +6,7 @@ import traceback
 from vndb import VNDB
 import translate
 import re
-from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, CallbackQuery
 from time import sleep
 import copy
 
@@ -550,7 +550,7 @@ def capsub(message: Message, temp: Temp):
 
 
 @bot.callback_query_handler(func=lambda call: True)
-def callback_query(call):
+def callback_query(call: CallbackQuery):
     try:
         bot.delete_message(call.from_user.id, call.message.message_id)
     except Exception as e:

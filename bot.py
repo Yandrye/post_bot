@@ -64,6 +64,7 @@ t_ela = icono(
     ':link: Ponga el link s3 del txt.\nEste se obtiene enviando el txt a toDus o de la misma forma que envió las partes.')
 t_ad = icono(
     ':expressionless: Lo sentimos, debe ser miembro del canal @{0} para poder usar el bot.\n\n/Empezar'.format(usercanal))
+capsub_no_text_error = icono(':expressionless: Buen intento, ahora ponlo bien')
 
 
 def acceso(id: int):
@@ -552,6 +553,22 @@ def capsub(message: Message, temp: Temp):
         introducc(message.chat.id, message.chat.first_name)
     else:
         temp.post.episo_up = error_Html(message.text)
+
+        if not temp.post.episo_up:
+            bot.send_message(message.chat.id, capsub_no_text_error)
+            sleep(2)
+            sms = bot.send_message(message.chat.id, t_cap, parse_mode='html')
+            bot.register_next_step_handler(sms, capsub, temp)
+            return
+
+        elif not filter(temp.post.episo_up):
+            sms = bot.send_message(
+                message.chat.id, 'No se permite url ni user_name.')
+            sleep(2)
+            sms = bot.send_message(message.chat.id, t_cap, parse_mode='html')
+            bot.register_next_step_handler(sms, capsub, temp)
+            return
+
         db.set_temp(message.chat.id, temp)
         try:
             sms = bot.send_message(message.chat.id, t_ela)

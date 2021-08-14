@@ -512,26 +512,31 @@ def txtlink(message: Message, temp: Temp):
 
             try:
                 sms = bot.send_message(message.chat.id, t_at)
+                bot.register_next_step_handler(sms, txtlink, temp)
             except:
                 print(traceback.format_exc())
-            bot.register_next_step_handler(sms, txtlink, temp)
+                bot.register_next_step_handler_by_chat_id(
+                    message.chat.id, txtlink, temp)
             return
 
         if temp.post.link:
             try:
                 sms = bot.send_message(message.chat.id, t_at)
+                bot.register_next_step_handler(sms, txtlink, temp)
             except:
                 print(traceback.format_exc())
-            bot.register_next_step_handler(sms, txtlink, temp)
+                bot.register_next_step_handler_by_chat_id(
+                    message.chat.id, txtlink, temp)
             return
 
         else:
             try:
                 sms = bot.send_message(message.chat.id, t_li)
+                bot.register_next_step_handler(sms, txtlink, temp)
             except:
                 print(traceback.format_exc())
-            bot.register_next_step_handler(sms, txtlink, temp)
-            return
+                bot.register_next_step_handler_by_chat_id(
+                    message.chat.id, txtlink, temp)
 
     elif message.content_type == "document" and temp.post.link:
         temp.post.txt = message.document.file_id
@@ -543,9 +548,11 @@ def txtlink(message: Message, temp: Temp):
         try:
             sms = bot.send_message(message.chat.id, t_el.format(
                 'o presione /finalizar para enviar al canal.' if temp.post.link else ''))
+            bot.register_next_step_handler(sms, txtlink, temp)
         except:
             print(traceback.format_exc())
-        bot.register_next_step_handler(sms, txtlink, temp)
+            bot.register_next_step_handler_by_chat_id(
+                message.chat.id, txtlink, temp)
 
 
 def capsub(message: Message, temp: Temp):
@@ -572,9 +579,11 @@ def capsub(message: Message, temp: Temp):
         db.set_temp(message.chat.id, temp)
         try:
             sms = bot.send_message(message.chat.id, t_ela)
+            bot.register_next_step_handler(sms, txtlink, temp)
         except:
             print(traceback.format_exc())
-        bot.register_next_step_handler(sms, txtlink, temp)
+            bot.register_next_step_handler_by_chat_id(
+                message.chat.id, txtlink, temp)
 
 
 @bot.callback_query_handler(func=lambda call: True)

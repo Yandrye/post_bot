@@ -2,7 +2,7 @@
 
 Bot de Telegram
 
--Crea publicaciones ayudado por las APIS de [Anilist](https://anilist.gitbook.io/anilist-apiv2-docs/), [Visual Novel Data Base](https://vndb.org), y las envía a un canal de Telegram.
+-Crea publicaciones ayudado por las APIS de [Anilist](https://anilist.gitbook.io/anilist-apiv2-docs/), [Visual Novel Data Base](https://vndb.org) y [IGDB](https://api-docs.igdb.com/) y las envía a un canal de Telegram.
 
 ## Información sobre copyright
 
@@ -22,3 +22,12 @@ Bot de Telegram
     SUPPORT = id del grupo/canal donde se anuncia quien ha hecho posts anónimos(para moderación)
 
     DATABASE_URL = dirección de la base de datos, heroku lo llena automáticamente con la base asociada al dyno
+
+## API de Juegos
+
+si no se colocan adecuadamente el bot inicia con la API desabilitada
+
+referencias en los docs
+
+    TWITCH_CLIENT_ID
+    TWITCH_CLIENT_SECRET

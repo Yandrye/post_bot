@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, LargeBinary
+from sqlalchemy import Column, Integer, LargeBinary, String
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
@@ -18,6 +18,7 @@ class Temp():
         self.name: str = None
         self.hidden_name: str = None
         self.post = P_Anime()
+        self.search_id: int = int()
 
 
 class P_Anime():
@@ -49,7 +50,7 @@ class P_Anime():
         self.peso = ''
         self.sis_j = ''
         self.name_txt = ''
-        self.hidden_name = ''
+        self.game_modes = ''
 
 
 Base = declarative_base()
@@ -60,6 +61,13 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     temp = Column(LargeBinary)
     aport = Column(Integer)
+
+
+class igdb(Base):
+    __tablename__ = 'igdb'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    app_access_token = Column(String)
+    expire = Column(Integer)
 
 
 class DBHelper:
@@ -162,4 +170,38 @@ class DBHelper:
         except Exception as e:
             session.close()
             print(f'An error occurred retrieving items. Item was\n{id}')
+            raise e
+
+    def set_igdb_app_access_token(self, access_token: str, expire: int):
+        session: Session = sessionmaker(self.engine)()
+        try:
+            db_item = session.query(igdb).first()
+            if db_item:
+                db_item.app_access_token = access_token
+                db_item.expire = expire
+                session.commit()
+            else:
+                session.add(igdb(
+                    app_access_token=access_token,
+                    expire=expire
+                ))
+                session.commit()
+            session.close()
+        except Exception as e:
+            session.close()
+            raise e
+
+    def get_igdb_app_access_token(self):
+        session: Session = sessionmaker(self.engine)()
+        try:
+            db_item = session.query(igdb).first()
+            session.close()
+            if db_item:
+                app_access_token: str = str(db_item.app_access_token)
+                expire: int = db_item.expire
+                return (app_access_token, expire)
+            else:
+                return None
+        except Exception as e:
+            session.close()
             raise e

@@ -1,4 +1,5 @@
 import anilist
+from igdb_helper import igdbHelper
 import telebot
 import emoji
 from animeBD import DBHelper, Temp, P_Anime
@@ -16,12 +17,16 @@ try:
     API_TOKEN = post_bot.API_TOKEN
     support = post_bot.support
     dbaddress = post_bot.dbaddress
+    twitch_client_id = post_bot.twitch_client_id
+    twitch_client_secret = post_bot.twitch_client_secret
 except:
     import os
     id_canal = os.getenv('ID_CANAL')
     API_TOKEN = os.getenv('TOKEN')
     support = os.getenv('SUPPORT')
     dbaddress = os.getenv('DATABASE_URL')
+    twitch_client_id = os.getenv('TWITCH_CLIENT_ID')
+    twitch_client_secret = os.getenv('TWITCH_CLIENT_SECRET')
 
 
 import logging
@@ -30,6 +35,18 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 vn = VNDB('darkness_posting_bot', '0.1')
 db = DBHelper(dbaddress)
+
+if twitch_client_id and twitch_client_secret:
+    igdb = igdbHelper(twitch_client_id, twitch_client_secret, db)
+    try:
+        igdb.search("halo")
+    except Exception as e:
+        print("game api not starting")
+        print(e)
+        twitch_client_id = None
+        twitch_client_secret = None
+else:
+    print("game api not starting")
 
 
 def icono(text=''):
@@ -129,7 +146,8 @@ def titulo(message: Message):
             markup.row(InlineKeyboardButton('Manga', callback_data='m'))
             markup.row(InlineKeyboardButton(
                 'Novela Visual', callback_data='vn'))
-            #markup.row(InlineKeyboardButton('Juego', callback_data='j'))
+            if twitch_client_id and twitch_client_secret:
+                markup.row(InlineKeyboardButton('Juego', callback_data='j'))
             markup.row(InlineKeyboardButton(
                 'Otro contenido', callback_data='o'))
             markup.row(InlineKeyboardButton(salir_menu, callback_data='s'))
@@ -188,6 +206,18 @@ def post_s(id: int, temp: Temp, index: int, kind: str):
             t = temp.search[index]['title']
             f = 'Novela Visual'
             l = temp.search[index]['image']
+        if kind == "game":
+            """
+            {
+                'coverImage': '//images.igdb.com/igdb/image/upload/t_cover_big/co2r2r.jpg', 
+                'title': 'Halo: Combat Evolved', 
+                'id': 740
+            }
+            """
+            pass
+            t = temp.search[index]['title']
+            f = "Juego"
+            l = temp.search[index]['coverImage']
 
         capt = '<b>{0}\n\nFormato: {1}</b>'.format(error_Html(t), f)
         markup = InlineKeyboardMarkup()
@@ -412,7 +442,8 @@ def make_message_body(temp: Temp):
     aj(':heavy_check_mark:Temporada: <b>{0}</b>\n', temp.post.temporada)
     aj(':heavy_check_mark:Tomo: <b>{0}</b>\n', temp.post.tomos)
     aj(':heavy_check_mark:Volumen: <b>{0}</b>\n', temp.post.volumen)
-    aj(':heavy_check_mark:Plataforma: <b>{0}</b>\n', temp.post.plata)
+    aj(':heavy_check_mark:Plataforma: <b>{0}</b>\n', temp.post.plata if isinstance(
+        temp.post.plata, str) else '‼editar')
     aj(':notes:Audio: <b>{0}</b>\n', temp.post.audio)
     aj(':heavy_check_mark:Idioma: <b>{0}</b>\n', temp.post.idioma)
     aj(':hourglass_flowing_sand:Duración: <b>{0}</b>\n', temp.post.duracion)
@@ -445,6 +476,18 @@ def complete_hard_requirements(temp: Temp):
     markup = InlineKeyboardMarkup()
     members = temp.post.__dict__
     for item in members:
+        if item == "plata" and not isinstance(members[item], str):
+            if temp.tipo == 'j':
+                """[{'id': 6, 'name': 'PC (Microsoft Windows)'}]"""
+                for platform in members[item]:
+                    markup.row(InlineKeyboardButton(
+                        platform['name'], callback_data=f'select_platfrom^{platform["name"]}^{platform["id"]}'))
+            if temp.tipo == 'vn':
+                """['win']"""
+                for platform in members[item]:
+                    markup.row(InlineKeyboardButton(
+                        platform, callback_data=f'select_platfrom^{platform}'))
+            return markup
         if members[item] == '‼editar':
             markup.row(edit_buttons[item])
     return markup
@@ -594,10 +637,22 @@ def callback_query(call: CallbackQuery):
         print('error borrar\n{0}'.format(e))
 
     else:
-        temp = db.get_temp(call.from_user.id)
+        temp: Temp = db.get_temp(call.from_user.id)
         if temp:
             data = call.data.split('^')
             l = len(data)
+
+            if data[0] == "select_platfrom":
+                if l == 3:
+                    temp.post.plata = data[1]
+                    temp.post.year = igdb.get_date(temp.search_id, data[2])
+                if l == 2:
+                    temp.post.plata = data[1]
+
+                post_e(temp, call.from_user.id, markup_e())
+                db.set_temp(call.from_user.id, temp)
+                return
+
             if l == 1:
                 temp.tipo = data[0]
 
@@ -616,6 +671,10 @@ def callback_query(call: CallbackQuery):
                                    f'(title~"{temp.titulo}")', '')
                         temp.search = [item for item in d['items']]
                         post_s(call.from_user.id, temp, 0, 'visualnovel')
+                    elif data[0] == 'j':
+                        d = igdb.search(temp.titulo)
+                        temp.search = d
+                        post_s(call.from_user.id, temp, 0, 'game')
                     elif data[0] == 'o':
                         temp.post.titulo = error_Html(temp.titulo)
                         post_e(temp, call.from_user.id, markup_e())
@@ -640,7 +699,6 @@ def callback_query(call: CallbackQuery):
 
                         temp.post = P_Anime()
                         temp.post.tipo = tipD[temp.tipo]
-                        temp.tipo = ''
                         temp.post.imagen = p['coverImage']
                         temp.post.titulo = error_Html(p['title'])
                         temp.post.format = p['format']
@@ -674,13 +732,40 @@ def callback_query(call: CallbackQuery):
 
                         temp.post = P_Anime()
                         temp.post.tipo = tipD[temp.tipo]
-                        temp.tipo = ''
                         temp.post.imagen = p['image']
                         temp.post.idioma = '‼editar'
-                        temp.post.plata = '‼editar'
+                        temp.post.plata = p['platforms']
                         temp.post.titulo = error_Html(p['title'])
                         temp.post.descripcion = translate.traducir(
                             error_Html(p['description']))
+                        temp.post.year = p["released"][0:4]
+
+                    if data[2] == 'game':
+                        p = igdb.get(data[1])
+                        """
+                        {'id' 740,
+                        'coverImage': 'https://images.igdb.com/igdb/image/upload/t_cover_big/co2r2r.jpg', 
+                        'title': 'Halo: Combat Evolved', 
+                        'genres': ['#Shooter'], 
+                        'game_modes': 'Single player, Multiplayer, Co-operative, Split screen', 
+                        'description': 'Se inclinó en el exterminio de la humanidad, una poderosa comunión de razas alienígenas conocida como Pacto está limpiando el imperio interestelar de la tierra.Sube a las botas del Jefe Maestro, un súper soldado biológicamente alterado, ya que usted y los otros defensores sobrevivientes de un mundo devastado de colonia hacen un intento desesperado de atraer a la flota alienígena lejos de la Tierra.Derribado y marrizado en el antiguo Halo del anillo-mundo, comienza una guerra de guerrillas contra el pacto.Lucha por la humanidad contra un ataque alienígena mientras corres para descubrir los misterios de Halo.', 
+                        'platforms': [{'id': 6, 'name': 'PC (Microsoft Windows)'}, {'id': 11, 'name': 'Xbox'}, {'id': 12, 'name': 'Xbox 360'}, {'id': 14, 'name': 'Mac'}]}
+                        """
+                        temp.search = None
+                        temp.titulo = ''
+
+                        temp.post = P_Anime()
+                        temp.post.tipo = tipD[temp.tipo]
+                        temp.post.imagen = p['coverImage']
+                        temp.post.idioma = '‼editar'
+                        temp.post.plata = '‼editar'
+                        temp.post.genero = p['genres']
+                        temp.post.titulo = error_Html(p['title'])
+                        temp.post.descripcion = translate.traducir(
+                            error_Html(p['description']))
+                        temp.post.game_modes = p['game_modes']
+                        temp.post.plata = p['platforms']
+                        temp.search_id = p["id"]
 
                     db.set_temp(call.from_user.id, temp)
 

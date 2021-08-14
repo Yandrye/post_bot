@@ -5,12 +5,14 @@ from sqlalchemy import create_engine
 import pickle
 
 from telebot.types import InlineKeyboardMarkup
-
+from typing import List, Dict
 
 class Temp():
     def __init__(self):
         self.markup: InlineKeyboardMarkup = None
         self.titulo: str = None
+        self.tipo: str = None
+        self.search: List[Dict[str, any]] = None
         self.username: str = None
         self.id_user: int = int()
         self.name: str = None

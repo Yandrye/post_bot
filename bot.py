@@ -476,7 +476,7 @@ def complete_hard_requirements(temp: Temp):
     markup = InlineKeyboardMarkup()
     members = temp.post.__dict__
     for item in members:
-        if item == "plata" and not isinstance(members[item], str):
+        if item == "plata" and members[item] and not isinstance(members[item], str):
             if temp.tipo == 'j':
                 """[{'id': 6, 'name': 'PC (Microsoft Windows)'}]"""
                 for platform in members[item]:
@@ -764,7 +764,7 @@ def callback_query(call: CallbackQuery):
                         temp.post.descripcion = translate.traducir(
                             error_Html(p['description']))
                         temp.post.game_modes = p['game_modes']
-                        temp.post.plata = p['platforms']
+                        temp.post.plata = p['platforms'] if p['platforms'] else '‼editar'
                         temp.search_id = p["id"]
 
                     db.set_temp(call.from_user.id, temp)

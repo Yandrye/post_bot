@@ -7,6 +7,7 @@ import pickle
 from telebot.types import InlineKeyboardMarkup
 from typing import List, Dict
 
+
 class Temp():
     def __init__(self):
         self.markup: InlineKeyboardMarkup = None
@@ -150,10 +151,7 @@ class DBHelper:
         try:
             db_item = session.query(User).filter_by(id=id).first()
             if db_item:
-                session.delete(db_item)
-                session.add(User(
-                    id=db_item.id,
-                    aport=db_item.aport+1, temp=db_item.temp))
+                db_item.aport = User.aport + 1
                 session.commit()
                 session.close()
         except Exception as e:

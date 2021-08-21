@@ -311,7 +311,7 @@ def markup_e1():
     markup.row(edit_buttons["creador"],
                edit_buttons["sis_j"])
 
-    markup.row(edit_buttons["hidden_name"])
+    #markup.row(edit_buttons["hidden_name"])
 
     markup.row(InlineKeyboardButton(icono(
         ':heavy_plus_sign: Más Categorías :heavy_plus_sign:'), callback_data='m^1'))

@@ -646,7 +646,7 @@ def capsub(message: Message, temp: Temp):
     if message.text == boton_cancelar:
         introducc(message.chat.id, message.chat.first_name)
     else:
-        temp.post.episo_up = error_Html(message.text)
+        temp.post.episo_up = error_Html(message.text)[:50]
 
         if not temp.post.episo_up:
             bot.send_message(message.chat.id, capsub_no_text_error)

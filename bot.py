@@ -135,7 +135,8 @@ def log(temp: Temp, action: str):
                 support,
                 heading +
                 f"link:\n❌",
-                parse_mode='html')
+                parse_mode='html',
+                disable_web_page_preview=True)
             temp.log_message = mssg
             db.set_temp(temp.id_user, temp)
         except:
@@ -151,7 +152,8 @@ def log(temp: Temp, action: str):
                 f'https://t.me/{usercanal}/{channel_message_id}',
                 chat_id=temp.log_message.chat.id,
                 message_id=temp.log_message.id,
-                parse_mode='html')
+                parse_mode='html',
+                disable_web_page_preview=True)
             temp.log_message = mssg
             db.set_temp(temp.id_user, temp)
         except:

@@ -7,7 +7,7 @@ import traceback
 from vndb import VNDB
 import translate
 import re
-from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, CallbackQuery
+from telebot.types import Chat, InlineKeyboardButton, InlineKeyboardMarkup, Message, CallbackQuery
 from time import sleep
 import copy
 
@@ -126,6 +126,54 @@ def send_welcome(message: Message):
     inicio(message.chat.id)
 
 
+def log(temp: Temp, action: str):
+    heading = (
+        f'<a href="tg://user?id={temp.id_user}">{temp.id_user}</a>\n')
+    if action == 'titulo':
+        try:
+            mssg = bot.send_message(
+                support, heading + f"searched for:\n{temp.titulo}", parse_mode='html')
+            temp.log_message = mssg
+            db.set_temp(temp.id_user, temp)
+        except:
+            print(traceback.format_exc())
+        return
+
+    if action.startswith('select'):
+        category = action.split("_")[1]
+        try:
+            mssg = bot.edit_message_text(
+                heading +
+                '\n'.join(temp.log_message.text.split('\n')[1:]) +
+                f"\nselected:\n{category}" +
+                f'\nsent to channel:' +
+                '\n❌',
+                chat_id=temp.log_message.chat.id,
+                message_id=temp.log_message.id,
+                parse_mode='html')
+            temp.log_message = mssg
+            db.set_temp(temp.id_user, temp)
+        except:
+            print(traceback.format_exc())
+        return
+
+    if action == 'sent_to_channel':
+        try:
+            mssg = bot.edit_message_text(
+                heading +
+                '\n'.join(temp.log_message.text.split('\n')[1:-1]) +
+                '\n✅' +
+                ('\nas anonymous' if temp.hidden_name else ''),
+                chat_id=temp.log_message.chat.id,
+                message_id=temp.log_message.id,
+                parse_mode='html')
+            temp.log_message = mssg
+            db.set_temp(temp.id_user, temp)
+        except:
+            print(traceback.format_exc())
+        return
+
+
 def titulo(message: Message):
     if message.text == boton_cancelar:
         introducc(message.chat.id, message.chat.first_name)
@@ -139,6 +187,7 @@ def titulo(message: Message):
             temp.name = message.chat.first_name
             temp.hidden_name = None
             temp.post = P_Anime()
+            log(temp, 'titulo')
             db.set_temp(message.chat.id, temp)
 
             markup = InlineKeyboardMarkup()
@@ -528,12 +577,7 @@ def txtlink(message: Message, temp: Temp):
         try:
             bot.send_message(message.chat.id, icono('<a href="https://t.me/{0}/{1}">:white_check_mark: <b>Enviado al canal :exclamation:</b></a>\n\nPresione {2} para crear otro post.'.format(
                 usercanal, id_sms, boton_empezar)), parse_mode='html', disable_web_page_preview=True)
-            if temp.hidden_name:
-                try:
-                    bot.send_message(support, '@' + temp.hidden_name +
-                                     f'<a href="https://t.me/{usercanal}/{id_sms}"> ha usado el modo anónimo</a>', parse_mode='html', disable_web_page_preview=True)
-                except:
-                    print(traceback.format_exc())
+            log(temp, 'sent_to_channel')
         except:
             print(traceback.format_exc())
         db.aport(message.chat.id)
@@ -663,19 +707,26 @@ def callback_query(call: CallbackQuery):
 
                 else:
                     if data[0] == 'a' or data[0] == 'm':
+                        if data[0] == 'a':
+                            log(temp, 'select_anime')
+                        if data[0] == 'm':
+                            log(temp, 'select_manga')
                         d = anilist.search(temp.titulo, data[0])
                         temp.search = d
                         post_s(call.from_user.id, temp, 0, 'animanga')
                     elif data[0] == 'vn':
+                        log(temp, 'select_visual novel')
                         d = vn.get('vn', 'basic,details',
                                    f'(title~"{temp.titulo}")', '')
                         temp.search = [item for item in d['items']]
                         post_s(call.from_user.id, temp, 0, 'visualnovel')
                     elif data[0] == 'j':
+                        log(temp, 'select_game')
                         d = igdb.search(temp.titulo)
                         temp.search = d
                         post_s(call.from_user.id, temp, 0, 'game')
                     elif data[0] == 'o':
+                        log(temp, 'select_other')
                         temp.post.titulo = error_Html(temp.titulo)
                         post_e(temp, call.from_user.id, markup_e())
 

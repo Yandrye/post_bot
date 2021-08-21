@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 import pickle
 
-from telebot.types import InlineKeyboardMarkup
+from telebot.types import InlineKeyboardMarkup, Message
 from typing import List, Dict
 
 
@@ -20,6 +20,7 @@ class Temp():
         self.hidden_name: str = None
         self.post = P_Anime()
         self.search_id: int = int()
+        self.log_message: Message = None
 
 
 class P_Anime():

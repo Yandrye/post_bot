@@ -6,7 +6,7 @@ Bot de Telegram
 
 ## Información sobre copyright
 
-### Para incluir el bot en su canal de anime de telegram relacionado con toDus s3 se seguirá lo siguiente
+### Para incluir el bot en su canal de telegram relacionado con toDus s3 se seguirá lo siguiente
 
 - el @username del bot estará en la info de su canal
 - en la info del bot habrá un link a este repo [Armando-J/post_bot](https://github.com/Armando-J/post_bot) y opcionalmente a [RathHunt/post-bot](https://github.com/RathHunt/post_bot)
@@ -19,13 +19,13 @@ Bot de Telegram
 
     TOKEN = el token del bot de telegram que te da [BotFather](https://t.me/BotFather)
 
-    SUPPORT = id del grupo/canal donde se anuncia quien ha hecho posts anónimos(para moderación)
+    SUPPORT = id del grupo/canal donde se registra la interacion con el bot (para moderación)
 
     DATABASE_URL = dirección de la base de datos, heroku lo llena automáticamente con la base asociada al dyno
 
 ## API de Juegos
 
-si no se colocan adecuadamente el bot inicia con la API desabilitada
+si no se colocan adecuadamente el bot inicia con la API deshabilitada
 
 referencias en los docs
 

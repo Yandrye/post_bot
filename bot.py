@@ -134,6 +134,7 @@ def log(temp: Temp, action: str):
             mssg = bot.send_message(
                 support,
                 heading +
+                f"{temp.titulo}\n" +
                 f"link:\n❌",
                 parse_mode='html',
                 disable_web_page_preview=True)
@@ -148,6 +149,7 @@ def log(temp: Temp, action: str):
         try:
             mssg = bot.edit_message_text(
                 heading +
+                f"{temp.titulo}\n" +
                 "link:\n" +
                 f'https://t.me/{usercanal}/{channel_message_id}',
                 chat_id=temp.log_message.chat.id,

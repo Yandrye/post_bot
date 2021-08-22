@@ -728,8 +728,6 @@ def callback_query(call: CallbackQuery):
                         'genres': ['#Adventure', '#Comedy', '#Fantasy', '#Mahou Shoujo', '#Romance'], 
                         'description': 'El cuarto grado Sakura Kinomoto encuentra un libro ...)'}"""
                         temp.search = None
-                        temp.titulo = ''
-
                         temp.post = P_Anime()
                         temp.post.tipo = tipD[temp.tipo]
                         temp.post.imagen = p['coverImage']
@@ -761,8 +759,6 @@ def callback_query(call: CallbackQuery):
                         'description': 'Okazaki Tomoya is a third year high school student at Hikarizaka Private High School, leading a life full of resentment. His mother passed away in a car accident when he was young, leading his father, Naoyuki, to resort to alcohol and gambling to cope. This resulted in constant fights between the two until Naoyuki dislocated Tomoya’s shoulder. Unable to play on his basketball team, Tomoya began to distance himself from other people. Ever since he has had a distant relationship with his father, naturally becoming a delinquent over time.\n\nWhile on a walk to school, Tomoya meets a strange girl named Furukawa Nagisa, questioning if she likes the school at all. He finds himself helping her, and as time goes by, Tomoya finds his life heading towards a new direction.'},
                         '''
                         temp.search = None
-                        temp.titulo = ''
-
                         temp.post = P_Anime()
                         temp.post.tipo = tipD[temp.tipo]
                         temp.post.imagen = p['image']
@@ -785,8 +781,6 @@ def callback_query(call: CallbackQuery):
                         'platforms': [{'id': 6, 'name': 'PC (Microsoft Windows)'}, {'id': 11, 'name': 'Xbox'}, {'id': 12, 'name': 'Xbox 360'}, {'id': 14, 'name': 'Mac'}]}
                         """
                         temp.search = None
-                        temp.titulo = ''
-
                         temp.post = P_Anime()
                         temp.post.tipo = tipD[temp.tipo]
                         temp.post.imagen = p['coverImage']

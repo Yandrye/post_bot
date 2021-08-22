@@ -7,7 +7,7 @@ import traceback
 from vndb import VNDB
 import translate
 import re
-from telebot.types import Chat, InlineKeyboardButton, InlineKeyboardMarkup, Message, CallbackQuery
+from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, CallbackQuery
 from time import sleep
 import copy
 

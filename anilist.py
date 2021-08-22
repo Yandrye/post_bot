@@ -97,7 +97,7 @@ def get(id):
                 'format': raw_response['data']['Media']['format'],
                 'status': raw_response['data']['Media']['status'],
                 'episodes': raw_response['data']['Media']['episodes'],
-                'genres': ['#{0}'.format(x) for x in raw_response['data']['Media']['genres']],
+                'genres': ['#{0}'.format(x).replace(' ','_').replace('-','_') for x in raw_response['data']['Media']['genres']],
                 'tags' : ['#{0}'.format(x['name']) for x in raw_response['data']['Media']['tags'][:5]],
                 'year' : raw_response['data']['Media']['startDate']['year'],
                 'description': translate.traducir(str(re.sub('<.*?>', '', raw_response['data']['Media']['description']))) if raw_response['data']['Media']['description'] else '',

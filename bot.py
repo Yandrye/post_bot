@@ -486,7 +486,7 @@ def make_message_body(temp: Temp):
     aj(':heavy_check_mark:Idioma: <b>{0}</b>\n', temp.post.idioma)
     aj(':hourglass_flowing_sand:Duración: <b>{0}</b>\n', temp.post.duracion)
     aj(':heavy_check_mark:Géneros: <b>{0}</b>\n',
-       ', '.join(temp.post.genero) if type(temp.post.genero) == list else temp.post.genero)
+       ' '.join(temp.post.genero) if type(temp.post.genero) == list else temp.post.genero)
     aj(':heavy_check_mark:Tags: <b>{0}</b>\n',
        ', '.join(temp.post.tags) if type(temp.post.tags) == list else temp.post.tags)
     aj(':heavy_check_mark:Estudio: <b>{0}</b>\n', temp.post.estudio)

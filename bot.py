@@ -468,38 +468,38 @@ def make_message_body(temp: Temp):
         if var:
             tt.append(txt.format(var))
 
-    tit = ':radioactive:{0} {1}\n\n'.format(
+    tit = ':fleur-de-lis:{0} {1}:fleur-de-lis:\n\n'.format(
         '({0})'.format("".join(x[0] for x in temp.post.tipo.split(
             " "))) if temp.post.tipo else '',
         '<b>{0}</b>'.format(temp.post.titulo) if temp.post.titulo else ':expressionless:')
 
     tt.append(tit)
-    aj(':heavy_check_mark:Tipo: <b>{0}</b>\n', temp.post.tipo)
-    aj(':heavy_check_mark:Formato: <b>{0}</b>\n', temp.post.format)
-    aj(':heavy_check_mark:Episodios: <b>{0}</b>\n', temp.post.episodes)
-    aj(':heavy_check_mark:Temporada: <b>{0}</b>\n', temp.post.temporada)
-    aj(':heavy_check_mark:Tomo: <b>{0}</b>\n', temp.post.tomos)
-    aj(':heavy_check_mark:Volumen: <b>{0}</b>\n', temp.post.volumen)
-    aj(':heavy_check_mark:Plataforma: <b>{0}</b>\n', temp.post.plata if isinstance(
+    aj(':ballot_box_with_check:Tipo: <b>{0}</b>\n', temp.post.tipo)
+    aj(':ballot_box_with_check:Formato: <b>{0}</b>\n', temp.post.format)
+    aj(':ballot_box_with_check:Episodios: <b>{0}</b>\n', temp.post.episodes)
+    aj(':ballot_box_with_check:Temporada: <b>{0}</b>\n', temp.post.temporada)
+    aj(':ballot_box_with_check:Tomo: <b>{0}</b>\n', temp.post.tomos)
+    aj(':ballot_box_with_check:Volumen: <b>{0}</b>\n', temp.post.volumen)
+    aj(':ballot_box_with_check:Plataforma: <b>{0}</b>\n', temp.post.plata if isinstance(
         temp.post.plata, str) else '‼editar')
     aj(':notes:Audio: <b>{0}</b>\n', temp.post.audio)
-    aj(':heavy_check_mark:Idioma: <b>{0}</b>\n', temp.post.idioma)
+    aj(':ballot_box_with_check:Idioma: <b>{0}</b>\n', temp.post.idioma)
     aj(':hourglass_flowing_sand:Duración: <b>{0}</b>\n', temp.post.duracion)
-    aj(':heavy_check_mark:Géneros: <b>{0}</b>\n',
+    aj(':ballot_box_with_check:Géneros: <b>{0}</b>\n',
        ' '.join(temp.post.genero) if type(temp.post.genero) == list else temp.post.genero)
-    aj(':heavy_check_mark:Tags: <b>{0}</b>\n',
+    aj(':ballot_box_with_check:Tags: <b>{0}</b>\n',
        ', '.join(temp.post.tags) if type(temp.post.tags) == list else temp.post.tags)
-    aj(':heavy_check_mark:Estudio: <b>{0}</b>\n', temp.post.estudio)
-    aj(':heavy_check_mark:Sistema de juego: <b>{0}</b>\n', temp.post.sis_j)
+    aj(':ballot_box_with_check:Estudio: <b>{0}</b>\n', temp.post.estudio)
+    aj(':ballot_box_with_check:Sistema de juego: <b>{0}</b>\n', temp.post.sis_j)
     aj(':floppy_disk:Peso: <b>{0}</b>\n', temp.post.peso)
-    aj(':heavy_check_mark:Versión: <b>{0}</b>\n', temp.post.version)
-    aj(':heavy_check_mark:Creador: <b>{0}</b>\n', temp.post.creador)
-    aj(':heavy_check_mark:Año: <b>{0}</b>\n', temp.post.year)
-    aj(':heavy_check_mark:Estado: <b>{0}</b>\n', temp.post.status)
-    aj('\n:beginner:Sinopsis: <b>{0}</b>\n', '{0}...'.format(temp.post.descripcion[:500]) if temp.post.descripcion and len(
+    aj(':ballot_box_with_check:Versión: <b>{0}</b>\n', temp.post.version)
+    aj(':ballot_box_with_check:Creador: <b>{0}</b>\n', temp.post.creador)
+    aj(':ballot_box_with_check:Año: <b>{0}</b>\n', temp.post.year)
+    aj(':ballot_box_with_check:Estado: <b>{0}</b>\n', temp.post.status)
+    aj('\n:ballot_box_with_check:Sinopsis: <b>{0}</b>\n', '{0}...'.format(temp.post.descripcion[:500]) if temp.post.descripcion and len(
         temp.post.descripcion) > 500 else temp.post.descripcion)
     aj('\n\n:warning:Información: <b>{0}</b>\n', temp.post.inf)
-    tt.append('\n:star:Aporte #{0} de {1}'.format(
+    tt.append('\n:beginner:Aporte #{0} de {1}'.format(
         db.get_aport(temp.id_user)+1, ('@' if temp.username else '') + (temp.username if temp.username else f'<a href="tg://user?id={temp.id_user}">{temp.name}</a>' if temp.name else 'Anónimo')))
     if temp.post.link:
         tt.append(
@@ -614,7 +614,7 @@ def txtlink(message: Message, temp: Temp):
                 bot.register_next_step_handler_by_chat_id(
                     message.chat.id, txtlink, temp)
 
-    elif message.content_type == "document" and temp.post.link:
+    elif message.content_type == "document":
         temp.post.txt = message.document.file_id
         # temp.post.name_txt=message.document.file_name
         db.set_temp(message.chat.id, temp)
@@ -655,11 +655,9 @@ def capsub(message: Message, temp: Temp):
         db.set_temp(message.chat.id, temp)
         try:
             sms = bot.send_message(message.chat.id, t_ela)
-            bot.register_next_step_handler(sms, txtlink, temp)
         except:
             print(traceback.format_exc())
-            bot.register_next_step_handler_by_chat_id(
-                message.chat.id, txtlink, temp)
+        bot.register_next_step_handler(sms, txtlink, temp)
 
 
 @bot.callback_query_handler(func=lambda call: True)

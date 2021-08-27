@@ -78,7 +78,7 @@ t_at = icono(
 t_li = icono(
     ':dizzy_face: Link incorrecto, por favor vuelva a enviarlo correctamente o presione /cancelar para salir.')
 t_ela = icono(
-    ':link: Ponga el link s3 del txt.\nEste se obtiene enviando el txt a toDus o de la misma forma que envió las partes.')
+    ':link: Ponga el Txt de la serie a subir .')
 t_ad = icono(
     ':expressionless: Lo sentimos, debe ser miembro del canal @{0} para poder usar el bot.\n\n/Empezar'.format(usercanal))
 capsub_no_text_error = icono(':expressionless: Buen intento, ahora ponlo bien')

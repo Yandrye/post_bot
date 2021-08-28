@@ -496,7 +496,7 @@ def make_message_body(temp: Temp):
     aj(':ballot_box_with_check:Creador: <b>{0}</b>\n', temp.post.creador)
     aj(':ballot_box_with_check:Año: <b>{0}</b>\n', temp.post.year)
     aj(':ballot_box_with_check:Estado: <b>{0}</b>\n', temp.post.status)
-    aj('\n:ballot_box_with_check:Sinopsis: <b>{0}</b>\n', '{0}...'.format(temp.post.descripcion[:500]) if temp.post.descripcion and len(
+    aj('\n:beginner:Sinopsis: <b>{0}</b>\n', '{0}...'.format(temp.post.descripcion[:500]) if temp.post.descripcion and len(
         temp.post.descripcion) > 500 else temp.post.descripcion)
     aj('\n\n:warning:Información: <b>{0}</b>\n', temp.post.inf)
     tt.append('\n:beginner:Aporte #{0} de {1}'.format(

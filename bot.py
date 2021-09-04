@@ -499,7 +499,7 @@ def make_message_body(temp: Temp):
     aj('\n📜Sinopsis: <b>{0}</b>\n', '{0}...'.format(temp.post.descripcion[:500]) if temp.post.descripcion and len(
         temp.post.descripcion) > 500 else temp.post.descripcion)
     aj('\n\n:warning:Información: <b>{0}</b>\n', temp.post.inf)
-    tt.append('\n:beginner:Aporte #{0} de {1}'.format(
+    tt.append('\n👨🏻‍💻Aporte #{0} de {1}'.format(
         db.get_aport(temp.id_user)+1, ('@' if temp.username else '') + (temp.username if temp.username else f'<a href="tg://user?id={temp.id_user}">{temp.name}</a>' if temp.name else 'Anónimo')))
     if temp.post.link:
         tt.append(

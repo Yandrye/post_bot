@@ -482,16 +482,16 @@ def make_message_body(temp: Temp):
     aj(':ballot_box_with_check:Volumen: <b>{0}</b>\n', temp.post.volumen)
     aj(':ballot_box_with_check:Plataforma: <b>{0}</b>\n', temp.post.plata if isinstance(
         temp.post.plata, str) else '‼editar')
-    aj(':notes:Audio: <b>{0}</b>\n', temp.post.audio)
+    aj(':ballot_box_with_check:Audio: <b>{0}</b>\n', temp.post.audio)
     aj(':ballot_box_with_check:Idioma: <b>{0}</b>\n', temp.post.idioma)
-    aj(':hourglass_flowing_sand:Duración: <b>{0}</b>\n', temp.post.duracion)
+    aj(':ballot_box_with_check:Duración: <b>{0}</b>\n', temp.post.duracion)
     aj(':ballot_box_with_check:Géneros: <b>{0}</b>\n',
        ' '.join(temp.post.genero) if type(temp.post.genero) == list else temp.post.genero)
     aj(':ballot_box_with_check:Tags: <b>{0}</b>\n',
        ', '.join(temp.post.tags) if type(temp.post.tags) == list else temp.post.tags)
     aj(':ballot_box_with_check:Estudio: <b>{0}</b>\n', temp.post.estudio)
     aj(':ballot_box_with_check:Sistema de juego: <b>{0}</b>\n', temp.post.sis_j)
-    aj(':floppy_disk:Peso: <b>{0}</b>\n', temp.post.peso)
+    aj(':ballot_box_with_check:Peso: <b>{0}</b>\n', temp.post.peso)
     aj(':ballot_box_with_check:Versión: <b>{0}</b>\n', temp.post.version)
     aj(':ballot_box_with_check:Creador: <b>{0}</b>\n', temp.post.creador)
     aj(':ballot_box_with_check:Año: <b>{0}</b>\n', temp.post.year)

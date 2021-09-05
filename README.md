@@ -21,7 +21,7 @@ Bot de Telegram
 
     SUPPORT = id del grupo/canal donde se registra la interacion con el bot (para moderación)
 
-    DATABASE_URL = dirección de la base de datos, heroku lo llena automáticamente con la base asociada al dyno
+    DATABASE_URL = dirección de la base de datos, si no te importa que se reinicie solo pon sqlite:///meh.db , si quieres persistencia busca una como elephant sql o el addon de heroku postgres
 
 ## API de Juegos
 

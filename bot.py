@@ -302,6 +302,7 @@ edit_buttons = {
     "version": InlineKeyboardButton('Editar Versión', callback_data='e^ve'),
     "peso":  InlineKeyboardButton('Editar Peso', callback_data='e^pe'),
     "creador": InlineKeyboardButton('Editar Creador', callback_data='e^cr'),
+    "Hora de subida": InlineKeyboardButton('Editar Hora de subida', callback_data='e^ho'),
     "sis_j": InlineKeyboardButton('Editar Sis de Juego', callback_data='e^sj'),
     "hidden_name": InlineKeyboardButton('Hacer post anónimo', callback_data='e^anonymity'),
 }
@@ -425,8 +426,10 @@ def editar(message: Message, t: str, temp: Temp):
                 elif t == 've':
                     _temp.post.version = var
                 elif t == 'pe':
-                    _temp.post.peso = var
+                   _temp.post.peso = var
                 elif t == 'cr':
+                   _temp.post.Hora de subida = var
+                elif t == 'ho':
                     _temp.post.creador = var
                 elif t == 'sj':
                     _temp.post.sis_j = var
@@ -483,9 +486,10 @@ def make_message_body(temp: Temp):
     aj(':ballot_box_with_check:Plataforma: <b>{0}</b>\n', temp.post.plata if isinstance(
         temp.post.plata, str) else '‼editar')
     aj(':ballot_box_with_check:Audio: <b>{0}</b>\n', temp.post.audio)
+    aj(':ballot_box_with_check:Hora de subida: <b>{0}</b>\n',
     aj(':ballot_box_with_check:Idioma: <b>{0}</b>\n', temp.post.idioma)
     aj(':ballot_box_with_check:Duración: <b>{0}</b>\n', temp.post.duracion)
-    aj(':ballot_box_with_check:Géneros: <b>{0}</b>\n',
+    aj(':ballot_box_with_check:Géneros: <b>{0}</b>\n', temp.post.Hora de subida)
        ' '.join(temp.post.genero) if type(temp.post.genero) == list else temp.post.genero)
     aj(':ballot_box_with_check:Tags: <b>{0}</b>\n',
        ', '.join(temp.post.tags) if type(temp.post.tags) == list else temp.post.tags)

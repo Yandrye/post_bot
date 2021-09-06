@@ -476,7 +476,7 @@ def make_message_body(temp: Temp):
     tt.append(tit)
     aj(':ballot_box_with_check:Tipo: <b>{0}</b>\n', temp.post.tipo)
     aj(':ballot_box_with_check:Formato: <b>{0}</b>\n', temp.post.format)
-    aj(':ballot_box_with_check:Episodios: <b>{0}</b>\n', temp.post.episodes)
+    aj('✅Episodios: <b>{0}</b>\n', temp.post.episodes)
     aj(':ballot_box_with_check:Temporada: <b>{0}</b>\n', temp.post.temporada)
     aj(':ballot_box_with_check:Tomo: <b>{0}</b>\n', temp.post.tomos)
     aj(':ballot_box_with_check:Volumen: <b>{0}</b>\n', temp.post.volumen)

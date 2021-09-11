@@ -53,6 +53,9 @@ class P_Anime():
         self.sis_j = ''
         self.name_txt = ''
         self.game_modes = ''
+        self.partes = ''
+        self.hora = ''
+      
 
 
 Base = declarative_base()

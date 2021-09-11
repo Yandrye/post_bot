@@ -283,6 +283,8 @@ def post_s(id: int, temp: Temp, index: int, kind: str):
 
 edit_buttons = {
     "titulo": InlineKeyboardButton('Editar Título', callback_data='e^n'),
+    "partes": InlineKeyboardButton('Editar Partes', callback_data='e^pa'),
+    "hora": InlineKeyboardButton('Editar Hora de Subida', callback_data='e^ho'),
     "episodes": InlineKeyboardButton('Editar Episodios', callback_data='e^e'),
     "tipo": InlineKeyboardButton('Editar Tipo', callback_data='e^t'),
     "format": InlineKeyboardButton('Editar Formato', callback_data='e^f'),
@@ -320,6 +322,8 @@ def markup_e():
 
     markup.row(edit_buttons["genero"],
                edit_buttons["status"])
+    markup.row(edit_buttons["partes"],
+               edit_buttons["hora"])           
 
     markup.row(edit_buttons["descripcion"],
                edit_buttons["imagen"])
@@ -406,6 +410,10 @@ def editar(message: Message, t: str, temp: Temp):
                     _temp.post.descripcion = var
                 elif t == 't':
                     _temp.post.tipo = var
+                elif t == 'pa':
+                    _temp.post.partes = var
+                elif t == 'ho':
+                    _temp.post.hora = var    
                 elif t == 'f':
                     _temp.post.format = var
                 elif t == 'in':
@@ -492,6 +500,8 @@ def make_message_body(temp: Temp):
     aj(':ballot_box_with_check:Estudio: <b>{0}</b>\n', temp.post.estudio)
     aj(':ballot_box_with_check:Sistema de juego: <b>{0}</b>\n', temp.post.sis_j)
     aj(':ballot_box_with_check:Peso: <b>{0}</b>\n', temp.post.peso)
+    aj(':ballot_box_with_check:Partes: <b>{0}</b>\n', temp.post.partes)
+    aj(':ballot_box_with_check:Hora de Subida: <b>{0}</b>\n', temp.post.hora)
     aj(':ballot_box_with_check:Versión: <b>{0}</b>\n', temp.post.version)
     aj(':ballot_box_with_check:Creador: <b>{0}</b>\n', temp.post.creador)
     aj(':ballot_box_with_check:Año: <b>{0}</b>\n', temp.post.year)

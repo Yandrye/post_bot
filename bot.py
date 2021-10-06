@@ -476,40 +476,40 @@ def make_message_body(temp: Temp):
         if var:
             tt.append(txt.format(var))
 
-    tit = ' 🏮{0} {1}🏮 \n\n'.format(
+    tit = ' 💥{0} {1}💥 \n\n'.format(
         '({0})'.format("".join(x[0] for x in temp.post.tipo.split(
             " "))) if temp.post.tipo else '',
         '<b>{0}</b>'.format(temp.post.titulo) if temp.post.titulo else ':expressionless:')
 
     tt.append(tit)
-    aj(':ballot_box_with_check:Tipo: <b>{0}</b>\n', temp.post.tipo)
-    aj(':ballot_box_with_check:Formato: <b>{0}</b>\n', temp.post.format)
-    aj('✅Episodios: <b>{0}</b>\n', temp.post.episodes)
-    aj(':ballot_box_with_check:Temporada: <b>{0}</b>\n', temp.post.temporada)
-    aj(':ballot_box_with_check:Tomo: <b>{0}</b>\n', temp.post.tomos)
-    aj(':ballot_box_with_check:Volumen: <b>{0}</b>\n', temp.post.volumen)
-    aj(':ballot_box_with_check:Plataforma: <b>{0}</b>\n', temp.post.plata if isinstance(
+    aj('⚜Tipo: <b>{0}</b>\n', temp.post.tipo)
+    aj('⚜Formato: <b>{0}</b>\n', temp.post.format)
+    aj('🔱Episodios: <b>{0}</b>\n', temp.post.episodes)
+    aj('⚜Temporada: <b>{0}</b>\n', temp.post.temporada)
+    aj('⚜Tomo: <b>{0}</b>\n', temp.post.tomos)
+    aj('⚜Volumen: <b>{0}</b>\n', temp.post.volumen)
+    aj('⚜Plataforma: <b>{0}</b>\n', temp.post.plata if isinstance(
         temp.post.plata, str) else '‼editar')
-    aj(':ballot_box_with_check:Audio: <b>{0}</b>\n', temp.post.audio)
-    aj(':ballot_box_with_check:Idioma: <b>{0}</b>\n', temp.post.idioma)
-    aj(':ballot_box_with_check:Duración: <b>{0}</b>\n', temp.post.duracion)
-    aj(':ballot_box_with_check:Géneros: <b>{0}</b>\n',
+    aj('⚜Audio: <b>{0}</b>\n', temp.post.audio)
+    aj('⚜Idioma: <b>{0}</b>\n', temp.post.idioma)
+    aj('⚜Duración: <b>{0}</b>\n', temp.post.duracion)
+    aj('⚜Géneros: <b>{0}</b>\n',
        ' '.join(temp.post.genero) if type(temp.post.genero) == list else temp.post.genero)
-    aj(':ballot_box_with_check:Tags: <b>{0}</b>\n',
+    aj('⚜Tags: <b>{0}</b>\n',
        ', '.join(temp.post.tags) if type(temp.post.tags) == list else temp.post.tags)
-    aj(':ballot_box_with_check:Estudio: <b>{0}</b>\n', temp.post.estudio)
-    aj(':ballot_box_with_check:Sistema de juego: <b>{0}</b>\n', temp.post.sis_j)
-    aj(':ballot_box_with_check:Peso: <b>{0}</b>\n', temp.post.peso)
-    aj(':ballot_box_with_check:Partes: <b>{0}</b>\n', temp.post.partes)
-    aj(':ballot_box_with_check:Hora de Subida: <b>{0}</b>\n', temp.post.hora)
-    aj(':ballot_box_with_check:Versión: <b>{0}</b>\n', temp.post.version)
-    aj(':ballot_box_with_check:Creador: <b>{0}</b>\n', temp.post.creador)
-    aj(':ballot_box_with_check:Año: <b>{0}</b>\n', temp.post.year)
-    aj(':ballot_box_with_check:Estado: <b>{0}</b>\n', temp.post.status)
-    aj('\n📜Sinopsis: <b>{0}</b>\n', '{0}...'.format(temp.post.descripcion[:500]) if temp.post.descripcion and len(
+    aj('⚜Estudio: <b>{0}</b>\n', temp.post.estudio)
+    aj('⚜Sistema de juego: <b>{0}</b>\n', temp.post.sis_j)
+    aj('⚜Peso: <b>{0}</b>\n', temp.post.peso)
+    aj('⚜ <b>{0}</b>\n', temp.post.partes)
+    aj('⚜Hora de Subida: <b>{0}</b>\n', temp.post.hora)
+    aj('⚜Versión: <b>{0}</b>\n', temp.post.version)
+    aj('⚜Creador: <b>{0}</b>\n', temp.post.creador)
+    aj('⚜Año: <b>{0}</b>\n', temp.post.year)
+    aj('⚜Estado: <b>{0}</b>\n', temp.post.status)
+    aj('\n🔰Sinopsis: <b>{0}</b>\n', '{0}...'.format(temp.post.descripcion[:500]) if temp.post.descripcion and len(
         temp.post.descripcion) > 500 else temp.post.descripcion)
     aj('\n\n:warning:Información: <b>{0}</b>\n', temp.post.inf)
-    tt.append('\n👨🏻‍💻Aporte #{0} de {1}'.format(
+    tt.append('\n💠Aporte #{0} de {1}'.format(
         db.get_aport(temp.id_user)+1, ('@' if temp.username else '') + (temp.username if temp.username else f'<a href="tg://user?id={temp.id_user}">{temp.name}</a>' if temp.name else 'Anónimo')))
     if temp.post.link:
         tt.append(
